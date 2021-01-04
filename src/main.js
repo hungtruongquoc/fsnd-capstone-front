@@ -1,12 +1,16 @@
-import Vue from 'vue'
+import {createApp} from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import PrimeVue from 'primevue/config'
 
-Vue.config.productionTip = false
+import 'primevue/resources/themes/saga-blue/theme.css'       //theme
+import 'primevue/resources/primevue.min.css'                 //core css
+import 'primeicons/primeicons.css' //icons
 
-new Vue({
-  router,
-  store,
-  render: h => h(App)
-}).$mount('#app')
+const app = createApp(App)
+app.use(store)
+app.use(router)
+app.use(PrimeVue)
+
+app.mount('#app')
