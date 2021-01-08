@@ -1,12 +1,28 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+      <router-link to="/">
+        <Button label="Home" class="p-button-link"/>
+      </router-link> |
+      <router-link to="/about">
+        <Button label="About" class="p-button-link"/>
+      </router-link> |
+      <Button label="Login" class="p-button-link"/>
     </div>
     <router-view/>
   </div>
 </template>
+
+<script>
+import Button from 'primevue/button';
+
+export default {
+  name: "Login",
+  components: [
+      Button
+  ]
+}
+</script>
 
 <style lang="scss">
 #app {
