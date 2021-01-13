@@ -26,3 +26,5 @@ yarn lint
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
+[Organize environment variables](https://www.telerik.com/blogs/10-good-practices-building-maintaining-large-vuejs-projects)
+
