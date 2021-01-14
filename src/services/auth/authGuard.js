@@ -1,22 +1,23 @@
-export function authGuard(appInstance) {
-  const {$auth} = appInstance;
-  return (to, from, next) => {
-    const fn = () => {
-      if ($auth.isAuthenticated) {
-        return next();
-      }
+import {getInstance} from "./authWrapper"
 
-      $auth.loginWithRedirect({appState: {targetUrl: to.fullPath}});
-    };
-
-    if (!$auth.loading) {
-      return fn();
+export function authGuardBuilder(to, from, next) {
+  const appInstance = getInstance()
+  const fn = () => {
+    if (appInstance.isAuthenticated) {
+      return next()
     }
+    const redirect_uri = `${window.location.origin}${from.fullPath}`;
 
-    appInstance.$watch("loading", loading => {
-      if (loading === false) {
-        return fn();
-      }
-    });
+    appInstance.loginWithRedirect({appState: {targetUrl: to.fullPath}, redirect_uri});
   };
+
+  if (!appInstance.loading) {
+    return fn()
+  }
+
+  appInstance.$watch("loading", loading => {
+    if (loading === false) {
+      return fn()
+    }
+  })
 }
