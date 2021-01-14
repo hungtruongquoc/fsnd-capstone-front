@@ -1,7 +1,7 @@
 <template>
   <BasePage>
     <template v-slot:title>
-      Movie List
+      Movies
     </template>
     Test
   </BasePage>

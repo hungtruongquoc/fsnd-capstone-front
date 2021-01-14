@@ -1,17 +1,20 @@
 <template>
-  <div class="home">
-    <Login/>
-  </div>
+  <BasePage>
+    <template v-slot:title>Crew Admin</template>
+    <div class="home">
+    </div>
+  </BasePage>
 </template>
 
 <script>
 // @ is an alias to /src
-import Login from './Login'
+import BasePage from "./BasePage"
 
 export default {
   name: 'Home',
-  components: {
-    Login
+  components: {BasePage},
+  created() {
+    console.log(this.isAuthenticated)
   }
 }
 </script>

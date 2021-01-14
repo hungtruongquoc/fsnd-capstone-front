@@ -9,7 +9,7 @@
         </template>
       </Menubar>
     </div>
-    <div class="p-grid" style="margin-left: 0">
+    <div class="p-grid app-menu" style="margin-left: 0">
       <div class="p-col-1" style="background-color: whitesmoke; height: 100vh; overflow: hidden"
            v-if="isAuthenticated">
         <Menu :model="secondaryMenu"/>
@@ -29,9 +29,9 @@ export default {
   data() {
     return {
       secondaryMenu: [
-        {icon: 'fas fa-fw fa-film-alt fa-lg', to: '/movies'},
-        {icon: 'fas fa-fw fa-user-cowboy fa-lg', to: '/artists'},
-        {icon: 'fas fa-fw fa-users fa-lg', to: '/crews'},
+        {icon: 'fas fa-fw fa-film-alt fa-lg', to: '/movies', label: 'Movies', class: 'no-label'},
+        {icon: 'fas fa-fw fa-user-cowboy fa-lg', to: '/artists', label: 'Artists', class: 'no-label'},
+        {icon: 'fas fa-fw fa-users fa-lg', to: '/crews', label: 'Crews', class: 'no-label'},
       ],
       menus: [
         {label: 'Home', icon: 'fas fa-fw fa-home', to: '/'},
@@ -61,6 +61,14 @@ export default {
   .p-menu {
     background-color: whitesmoke;
     border: none;
+  }
+
+  .app-menu {
+    .no-label {
+      .p-menuitem-text {
+        display: none;
+      }
+    }
   }
 
   #nav {

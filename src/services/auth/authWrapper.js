@@ -86,45 +86,45 @@ export const useAuth0 = ({
         return ''
       },
       async loginWithPopup(options, config) {
-        this.popupOpen = true;
+        this.popupOpen = true
 
         try {
-          await this.auth0Client.loginWithPopup(options, config);
-          this.user = await this.auth0Client.getUser();
-          this.isAuthenticated = await this.auth0Client.isAuthenticated();
-          this.error = null;
+          await this.auth0Client.loginWithPopup(options, config)
+          this.user = await this.auth0Client.getUser()
+          this.isAuthenticated = await this.auth0Client.isAuthenticated()
+          this.error = null
         } catch (e) {
           console.error(e);
-          this.error = e;
+          this.error = e
         } finally {
-          this.popupOpen = false;
+          this.popupOpen = false
         }
       },
       async handleRedirectCallback() {
         this.loading = true;
         try {
-          await this.auth0Client.handleRedirectCallback();
+          await this.auth0Client.handleRedirectCallback()
           debugger;
-          this.user = await this.auth0Client.getUser();
-          this.isAuthenticated = true;
-          this.error = null;
+          this.user = await this.auth0Client.getUser()
+          this.isAuthenticated = true
+          this.error = null
         } catch (e) {
-          this.error = e;
+          this.error = e
         } finally {
-          this.loading = false;
+          this.loading = false
         }
       },
       loginWithRedirect(o) {
-        window.location.assign(this.build_login_link(o.redirect_uri));
+        window.location.assign(this.build_login_link(o.redirect_uri))
       },
       getIdTokenClaims(o) {
-        return this.auth0Client.getIdTokenClaims(o);
+        return this.auth0Client.getIdTokenClaims(o)
       },
       getTokenSilently(o) {
-        return this.auth0Client.getTokenSilently(o);
+        return this.auth0Client.getTokenSilently(o)
       },
       getTokenWithPopup(o) {
-        return this.auth0Client.getTokenWithPopup(o);
+        return this.auth0Client.getTokenWithPopup(o)
       }
     },
     async mounted() {
@@ -139,22 +139,22 @@ export const useAuth0 = ({
         // this.error = null;
         // onRedirectCallback(appState);
         this.check_token_fragment()
-        this.load_jwts();
+        this.load_jwts()
       } catch (e) {
-        this.error = e;
+        this.error = e
       } finally {
         // this.isAuthenticated = await this.auth0Client.isAuthenticated();
         // this.user = await this.auth0Client.getUser();
-        this.loading = false;
-        appInstance = this;
+        this.loading = false
+        appInstance = this
       }
     },
     computed: {
       loginLink() {
-        return this.build_login_link(redirectUri);
+        return this.build_login_link(redirectUri)
       },
       isAuthenticated() {
-        return !!this.payload;
+        return !!this.payload
       }
     }
   }
