@@ -33,7 +33,7 @@ export const useAuth0 = ({
         this.token = '';
         this.payload = null;
         this.set_jwt();
-        const {domain, clientId} = options;
+        const {domain, clientId} = this.appConfig.auth0;
         const logoutUrl = `https://${domain}/v2/logout?client_id=${clientId}&returnTo=${window.location.origin}`;
         window.location.assign(logoutUrl);
       },
@@ -72,15 +72,18 @@ export const useAuth0 = ({
         return this.payload
       },
       build_login_link(callbackPath = '') {
-        const {audience, domain, clientId} = options;
-        let link = 'https://'
-        link += domain
-        link += '/authorize?'
-        link += 'audience=' + audience + '&'
-        link += 'response_type=token&'
-        link += 'client_id=' + clientId + '&'
-        link += 'redirect_uri=' + callbackPath
-        return link
+        if (this.appConfig) {
+          const {audience, domain, clientId} = this.appConfig.auth0;
+          let link = 'https://'
+          link += domain
+          link += '/authorize?'
+          link += 'audience=' + audience + '&'
+          link += 'response_type=token&'
+          link += 'client_id=' + clientId + '&'
+          link += 'redirect_uri=' + callbackPath
+          return link
+        }
+        return ''
       },
       async loginWithPopup(options, config) {
         this.popupOpen = true;
@@ -125,7 +128,6 @@ export const useAuth0 = ({
       }
     },
     async mounted() {
-
       try {
         this.auth0Client = await createAuth0Client({
           ...options,
@@ -152,7 +154,6 @@ export const useAuth0 = ({
         return this.build_login_link(window.location.origin);
       },
       isAuthenticated() {
-        debugger;
         return !!this.payload;
       }
     }
