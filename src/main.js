@@ -10,9 +10,15 @@ import 'primevue/resources/themes/saga-blue/theme.css'       //theme
 import 'primevue/resources/primevue.min.css'                 //core css
 import 'primeicons/primeicons.css' //icons
 import 'primeflex/primeflex.css'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faHome, faSignInAlt, faBullhorn, faSignOut } from '@fortawesome/pro-regular-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+library.add(faHome, faSignInAlt, faBullhorn, faSignOut)
 
 const app = createApp(App)
 
+app.component('font-awesome-icon', FontAwesomeIcon)
 app.use(Config)
 app.mixin(useAuth0({
   onRedirectCallback: appState => {

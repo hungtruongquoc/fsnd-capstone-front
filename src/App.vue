@@ -2,21 +2,29 @@
   <div id="app">
     <div id="nav">
       <router-link to="/">
-        <Button label="Home" class="p-button-link"/>
+        <Button class="p-button-link">
+          <font-awesome-icon :icon="['far', 'home']" /> <span style="margin-left: 5px">Home</span>
+        </Button>
       </router-link>
       |
       <router-link to="/about">
-        <Button label="About" class="p-button-link"/>
+        <Button class="p-button-link">
+          <font-awesome-icon :icon="['far', 'bullhorn']"/> <span style="margin-left: 5px">About</span>
+        </Button>
       </router-link>
       <template v-if="!isAuthenticated">
         |
         <a :href="loginLink">
-          <Button label="Login" class="p-button-link"/>
+          <Button class="p-button-link">
+            <font-awesome-icon :icon="['far', 'sign-in-alt']"/> <span style="margin-left: 5px">Login</span>
+          </Button>
         </a>
       </template>
       <template v-else>
         |
-        <Button label="Logout" class="p-button-link" @click="logout"/>
+        <Button class="p-button-link" @click="logout">
+          <font-awesome-icon :icon="['far', 'sign-out']"/> <span style="margin-left: 5px">Logout</span>
+        </Button>
       </template>
     </div>
     <router-view/>
