@@ -20,9 +20,21 @@ function routeBuilder() {
     {
       path: '/movies',
       name: 'Movie List',
-      component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
+      component: () => import(/* webpackChunkName: "about" */ '../views/Movie.vue'),
       beforeEnter: authGuardBuilder
-    }
+    },
+    {
+      path: '/artists',
+      name: 'Artist List',
+      component: () => import(/* webpackChunkName: "about" */ '../views/Artists'),
+      beforeEnter: authGuardBuilder
+    },
+    {
+      path: '/crews',
+      name: 'Crew List',
+      component: () => import(/* webpackChunkName: "about" */ '../views/Crews'),
+      beforeEnter: authGuardBuilder
+    },
   ]
 }
 

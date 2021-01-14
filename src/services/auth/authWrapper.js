@@ -151,7 +151,7 @@ export const useAuth0 = ({
     },
     computed: {
       loginLink() {
-        return this.build_login_link(window.location.origin);
+        return this.build_login_link(redirectUri);
       },
       isAuthenticated() {
         return !!this.payload;
