@@ -3,11 +3,21 @@
     <div id="nav">
       <router-link to="/">
         <Button label="Home" class="p-button-link"/>
-      </router-link> |
+      </router-link>
+      |
       <router-link to="/about">
         <Button label="About" class="p-button-link"/>
-      </router-link> |
-      <Button label="Login" class="p-button-link"/>
+      </router-link>
+      <template v-if="!isAuthenticated">
+        |
+        <a :href="loginLink">
+          <Button label="Login" class="p-button-link"/>
+        </a>
+      </template>
+      <template v-else>
+        |
+        <Button label="Logout" class="p-button-link" @click="logout"/>
+      </template>
     </div>
     <router-view/>
   </div>
@@ -19,7 +29,7 @@ import Button from 'primevue/button';
 export default {
   name: "Login",
   components: [
-      Button
+    Button
   ]
 }
 </script>
