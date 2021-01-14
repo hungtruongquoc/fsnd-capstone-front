@@ -3,11 +3,20 @@
     <div id="nav">
       <Menubar :model="menus">
         <template #start>
-          <font-awesome-icon :icon="['far', 'camera-movie']" size="2x"/>
+          <span style="margin: 24px;">
+            <font-awesome-icon :icon="['far', 'camera-movie']" size="2x"/>
+          </span>
         </template>
       </Menubar>
     </div>
-    <router-view/>
+    <div class="p-grid">
+      <div class="p-col-1">
+
+      </div>
+      <div class="p-col">
+        <router-view/>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -19,11 +28,11 @@ export default {
   data() {
     return {
       menus: [
-        {label: 'Home', icon: 'pi pi-fw pi-home', to: '/'},
-        {label: 'About', icon: 'pi pi-fw pi-info', to: '/about'},
-        {label: 'Login', icon: 'pi pi-fw pi-sign-in', url: this.loginLink, visible: () => !this.isAuthenticated},
+        {label: 'Home', icon: 'fas fa-fw fa-home', to: '/'},
+        {label: 'About', icon: 'fas fa-fw fa-info', to: '/about'},
+        {label: 'Login', icon: 'fas fa-fw fa-sign-in-alt', url: this.loginLink, visible: () => !this.isAuthenticated},
         {
-          label: 'Logout', icon: 'pi pi-fw pi-sign-out', visible: () => this.isAuthenticated, command: () => {
+          label: 'Logout', icon: 'fas fa-fw fa-sign-out', visible: () => this.isAuthenticated, command: () => {
             this.logout();
           }
         },
