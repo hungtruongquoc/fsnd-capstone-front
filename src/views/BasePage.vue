@@ -1,6 +1,6 @@
 <template>
   <div class="page-container">
-    <h1>
+    <h1 class="p-text-left p-pl-4">
       <slot name="title"></slot>
     </h1>
     <slot></slot>

@@ -14,10 +14,10 @@ import 'primevue/resources/primevue.min.css'                 //core css
 import 'primeicons/primeicons.css' //icons
 import 'primeflex/primeflex.css'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faHome, faSignInAlt, faBullhorn, faSignOut, faCameraMovie } from '@fortawesome/pro-regular-svg-icons'
+import { faHome, faSignInAlt, faBullhorn, faSignOut, faCameraMovie, faFilmAlt } from '@fortawesome/pro-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(faHome, faSignInAlt, faBullhorn, faSignOut, faCameraMovie)
+library.add(faHome, faSignInAlt, faBullhorn, faSignOut, faCameraMovie, faFilmAlt)
 
 const app = createApp(App)
 
