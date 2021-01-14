@@ -1,31 +1,11 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">
-        <Button class="p-button-link">
-          <font-awesome-icon :icon="['far', 'home']" /> <span style="margin-left: 5px">Home</span>
-        </Button>
-      </router-link>
-      |
-      <router-link to="/about">
-        <Button class="p-button-link">
-          <font-awesome-icon :icon="['far', 'bullhorn']"/> <span style="margin-left: 5px">About</span>
-        </Button>
-      </router-link>
-      <template v-if="!isAuthenticated">
-        |
-        <a :href="loginLink">
-          <Button class="p-button-link">
-            <font-awesome-icon :icon="['far', 'sign-in-alt']"/> <span style="margin-left: 5px">Login</span>
-          </Button>
-        </a>
-      </template>
-      <template v-else>
-        |
-        <Button class="p-button-link" @click="logout">
-          <font-awesome-icon :icon="['far', 'sign-out']"/> <span style="margin-left: 5px">Logout</span>
-        </Button>
-      </template>
+      <Menubar :model="menus">
+        <template #start>
+          <font-awesome-icon :icon="['far', 'camera-movie']" size="2x"/>
+        </template>
+      </Menubar>
     </div>
     <router-view/>
   </div>
@@ -36,6 +16,20 @@ import Button from 'primevue/button';
 
 export default {
   name: "Login",
+  data() {
+    return {
+      menus: [
+        {label: 'Home', icon: 'pi pi-fw pi-home', to: '/'},
+        {label: 'About', icon: 'pi pi-fw pi-info', to: '/about'},
+        {label: 'Login', icon: 'pi pi-fw pi-sign-in', url: this.loginLink, visible: () => !this.isAuthenticated},
+        {
+          label: 'Logout', icon: 'pi pi-fw pi-sign-out', visible: () => this.isAuthenticated, command: () => {
+            this.logout();
+          }
+        },
+      ]
+    }
+  },
   components: [
     Button
   ]
