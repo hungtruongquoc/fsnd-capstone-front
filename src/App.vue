@@ -10,7 +10,7 @@
       </Menubar>
     </div>
     <div class="p-grid" style="margin-left: 0">
-      <div class="p-col-1 app-menu" style="background-color: whitesmoke; height: 100vh; overflow: hidden"
+      <div class="p-col-1 app-menu" style="background-color: whitesmoke; height: 95vh; overflow: hidden"
            v-if="isAuthenticated">
         <Menu :model="secondaryMenu"/>
       </div>
@@ -55,6 +55,7 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+
   .p-menu {
     background-color: whitesmoke;
     border: none;
@@ -64,6 +65,7 @@ export default {
     .p-menu {
       width: initial;
       margin: 0 -.5rem;
+
       .p-menuitem {
         a {
           svg {
@@ -72,6 +74,7 @@ export default {
         }
       }
     }
+
     .no-label {
       .p-menuitem-text {
         display: none;

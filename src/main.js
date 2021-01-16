@@ -39,7 +39,6 @@ const auth = createAuth({
   ...VueAuthOptions
 })
 
-
 app.use(Config)
 app.mixin(useAuth0({
   redirectUri: `${window.location.origin}/movies`,

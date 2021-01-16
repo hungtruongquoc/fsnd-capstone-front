@@ -134,6 +134,7 @@ export const useAuth0 = ({
     async mounted() {
       if (this.doInitialAuthentication) {
         try {
+          this.axios.defaults.baseURL = this.appConfig.apiBaseUrl;
           this.auth0Client = await createAuth0Client({
             ...options,
             client_id: options.clientId,
