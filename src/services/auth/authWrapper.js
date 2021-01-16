@@ -172,8 +172,22 @@ export const useAuth0 = ({
         return !!this.payload
       },
       currentToken() {
-        debugger;
         return this.token;
+      },
+      role() {
+        if (this.payload) {
+          if (this.payload.permissions.includes('create:movie')) {
+            return 'executive producer';
+          }
+          if (this.payload.permissions.includes('edit:movie')) {
+            return 'casting director';
+          }
+          if (2 === this.payload.permissions.length) {
+            return 'casting assistant';
+          }
+          return 'authenticated';
+        }
+        return 'unknown';
       }
     }
   }

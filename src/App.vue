@@ -7,8 +7,13 @@
             <font-awesome-icon :icon="['far', 'camera-movie']" size="2x"/>
           </span>
         </template>
-        <template #end>
-          <font-awesome-icon :icon="['far', 'user-circle']" size="2x"/>
+        <template #end v-if="isAuthenticated">
+          <div class="user-info p-grid p-ai-center vertical-container">
+            <span class="p-col">
+              <font-awesome-icon :icon="['far', 'user-circle']" size="2x"/>
+            </span>
+            <h4 class="p-text-capitalize p-col">{{role}}</h4>
+          </div>
         </template>
       </Menubar>
     </div>
