@@ -33,7 +33,7 @@ export const useAuth0 = ({
         this.token = '';
         this.payload = null;
         if (this.$auth) {
-          this.$auth.token(null, null, true)
+          this.$auth.token(null, null, false)
         }
         this.set_jwt();
         const {domain, clientId} = this.appConfig.auth0;
@@ -73,7 +73,6 @@ export const useAuth0 = ({
       },
       decodeJWT(token) {
         this.payload = decode(token)
-        console.log(decode(token))
         return this.payload
       },
       build_login_link(callbackPath = '') {
@@ -109,7 +108,6 @@ export const useAuth0 = ({
         this.loading = true;
         try {
           await this.auth0Client.handleRedirectCallback()
-          debugger;
           this.user = await this.auth0Client.getUser()
           this.isAuthenticated = true
           this.error = null
@@ -146,6 +144,16 @@ export const useAuth0 = ({
           })
           this.check_token_fragment()
           this.load_jwts()
+          // const {domain} = this.appConfig.auth0
+          console.log(this.token)
+          console.log(this.payload)
+          // try {
+          //   const user = await this.axios.get(`https://${domain}/userinfo`)
+          //   console.log(user)
+          // }
+          // catch (e) {
+          //   console.log(e)
+          // }
         } catch (e) {
           this.error = e
         } finally {
@@ -162,6 +170,10 @@ export const useAuth0 = ({
       },
       isAuthenticated() {
         return !!this.payload
+      },
+      currentToken() {
+        debugger;
+        return this.token;
       }
     }
   }

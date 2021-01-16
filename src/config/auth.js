@@ -19,7 +19,9 @@ export default {
     rolesKey: 'type',
     notFoundRedirect: {name: 'user-account'},
     refreshData: {enabled: false},
-    fetchData: {enabled: false},
+    fetchData: {
+      enabled: false,
+    },
     tokenDefaultKey: JWTS_LOCAL_KEY,
     stores: ['storage', 'cookie'],
   }
