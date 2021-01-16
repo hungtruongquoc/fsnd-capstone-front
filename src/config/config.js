@@ -1,5 +1,5 @@
 const config = {
-  apiBaseUrl: process.env.VUE_APP_API_BASE_URL || 'http://localhost:8081',
+  apiBaseUrl: process.env.VUE_APP_API_BASE_URL || 'http://localhost:8081/api',
   locale: process.env.VUE_APP_LOCALE,
   auth0: {
     domain: process.env.VUE_APP_AUTH0_DOMAIN,

@@ -13,7 +13,7 @@ export default {
   name: "Artists",
   components: {BasePage},
   mounted() {
-    this.axios.get('/api/actors');
+    this.axios.get('/actors');
     console.log(this.$auth.token());
   }
 }
