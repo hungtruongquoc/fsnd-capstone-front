@@ -15,6 +15,7 @@ export default {
   components: {BasePage},
   created() {
     console.log(this.isAuthenticated)
+    console.log('Home Page created')
   }
 }
 </script>

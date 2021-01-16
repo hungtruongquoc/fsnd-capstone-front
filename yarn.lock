@@ -1735,6 +1735,11 @@
     "@webassemblyjs/wast-parser" "1.9.1"
     "@xtuc/long" "4.2.2"
 
+"@websanova/vue-auth@^4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@websanova/vue-auth/-/vue-auth-4.1.0.tgz#a3939639bf950d23ee1f457b7cfac2c3cc526004"
+  integrity sha512-JaGYHvbYPkaGHOMYjH9wzqqGJbcxwn1cTU9I87dJjmsN5kglc6znEu1nbldmfthzHg4rciMQ/YGNuTaMEcj9Aw==
+
 "@xtuc/ieee754@^1.2.0":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@xtuc/ieee754/-/ieee754-1.2.0.tgz#eef014a3145ae477a1cbc00cd1e552336dceb790"
@@ -2028,6 +2033,13 @@ autoprefixer@^10.1.0:
     fraction.js "^4.0.12"
     normalize-range "^0.1.2"
     postcss-value-parser "^4.1.0"
+
+axios@^0.21.1:
+  version "0.21.1"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-0.21.1.tgz#22563481962f4d6bde9a76d516ef0e5d3c09b2b8"
+  integrity sha512-dKQiRHxGD9PPRIUNIWvZhPTPpl1rf/OxTYKsqKUDjBwYylTvV7SjSHJb9ratfyzM6wCdLCOYLzs73qpg5c4iGA==
+  dependencies:
+    follow-redirects "^1.10.0"
 
 babel-loader@^8.2.2:
   version "8.2.2"
@@ -3841,7 +3853,7 @@ flatted@^3.1.0:
   resolved "https://registry.yarnpkg.com/flatted/-/flatted-3.1.0.tgz#a5d06b4a8b01e3a63771daa5cb7a1903e2e57067"
   integrity sha512-tW+UkmtNg/jv9CSofAKvgVcO7c2URjhTdW1ZTkcAritblu8tajiYy7YisnIflEwtKssCtOxpnBRoCB7iap0/TA==
 
-follow-redirects@^1.0.0:
+follow-redirects@^1.0.0, follow-redirects@^1.10.0:
   version "1.13.1"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.13.1.tgz#5f69b813376cee4fd0474a3aba835df04ab763b7"
   integrity sha512-SSG5xmZh1mkPGyKzjZP8zLjltIfpW32Y5QpdNJyjcfGxK3qo3NDDkZOZSFiGn1A6SclQxY9GzEwAHQ3dmYRWpg==
@@ -7701,6 +7713,11 @@ vendors@^1.0.0:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/vendors/-/vendors-1.0.4.tgz#e2b800a53e7a29b93506c3cf41100d16c4c4ad8e"
   integrity sha512-/juG65kTL4Cy2su4P8HjtkTxk6VmJDiOPBufWniqQ6wknac6jNiXS9vU+hO3wgusiyqWlzTbVHi0dyJqRONg3w==
+
+vue-axios@^3.2.2:
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/vue-axios/-/vue-axios-3.2.2.tgz#c945694a4b7f4f741a07afbaec9e76b4877b618f"
+  integrity sha512-kRhbZOOp9p+iEB46mtC7tfwYlvmycLUsdNUjC+24So6PkhK9VathdEP0d5OcR2QDb/Z+JNTs4i8DzJEGbx9zOg==
 
 vue-eslint-parser@^7.3.0:
   version "7.3.0"

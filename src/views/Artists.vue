@@ -11,7 +11,11 @@ import BasePage from "./BasePage";
 
 export default {
   name: "Artists",
-  components: {BasePage}
+  components: {BasePage},
+  mounted() {
+    this.axios.get('/api/actors');
+    console.log(this.$auth.token());
+  }
 }
 </script>
 
