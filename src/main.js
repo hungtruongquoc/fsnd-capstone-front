@@ -19,7 +19,7 @@ import VueAuthOptions from './config/auth'
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // FontAwesome ////////////////////////////////////////////////////////////////////////////////////////////////////////
 import {library} from '@fortawesome/fontawesome-svg-core'
-import {faHome, faSignInAlt, faBullhorn, faSignOut, faCameraMovie, faFilmAlt} from '@fortawesome/pro-regular-svg-icons'
+import {faHome, faSignInAlt, faBullhorn, faSignOut, faCameraMovie, faFilmAlt, faUserCircle} from '@fortawesome/pro-regular-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 import axios from "axios";
@@ -27,7 +27,7 @@ import {useAuth0} from "./services/auth"
 import Config from './config/config'
 import VueAxios from "vue-axios";
 
-library.add(faHome, faSignInAlt, faBullhorn, faSignOut, faCameraMovie, faFilmAlt)
+library.add(faHome, faSignInAlt, faBullhorn, faSignOut, faCameraMovie, faFilmAlt, faUserCircle)
 
 const app = createApp(App)
 const router = routerBuilder()

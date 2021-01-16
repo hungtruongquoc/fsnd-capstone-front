@@ -7,6 +7,9 @@
             <font-awesome-icon :icon="['far', 'camera-movie']" size="2x"/>
           </span>
         </template>
+        <template #end>
+          <font-awesome-icon :icon="['far', 'user-circle']" size="2x"/>
+        </template>
       </Menubar>
     </div>
     <div class="p-grid" style="margin-left: 0">
@@ -22,7 +25,6 @@
 </template>
 
 <script>
-
 export default {
   name: "Login",
   data() {
