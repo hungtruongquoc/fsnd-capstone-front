@@ -9,7 +9,10 @@ import BasePage from "./BasePage";
 
 export default {
   name: "Crews",
-  components: {BasePage}
+  components: {BasePage},
+  created() {
+    console.log('Crew Page created');
+  }
 }
 </script>
 

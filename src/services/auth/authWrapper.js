@@ -3,7 +3,7 @@ import decode from 'jwt-decode';
 
 let appInstance
 // const DEFAULT_REDIRECT_CALLBACK = () => window.history.replaceState({}, document.title, window.location.pathname);
-const JWTS_LOCAL_KEY = 'JWTS_LOCAL_KEY';
+export const JWTS_LOCAL_KEY = 'JWTS_LOCAL_KEY';
 // const JWTS_ACTIVE_INDEX_KEY = 'JWTS_ACTIVE_INDEX_KEY';
 
 /** Returns the current instance of the SDK */
@@ -32,6 +32,9 @@ export const useAuth0 = ({
       logout() {
         this.token = '';
         this.payload = null;
+        if (this.$auth) {
+          this.$auth.token(null, null, true)
+        }
         this.set_jwt();
         const {domain, clientId} = this.appConfig.auth0;
         const logoutUrl = `https://${domain}/v2/logout?client_id=${clientId}&returnTo=${window.location.origin}`;
@@ -42,6 +45,7 @@ export const useAuth0 = ({
       },
       load_jwts() {
         this.token = localStorage.getItem(JWTS_LOCAL_KEY) || null
+        this.$auth.token(null, this.token, true)
         if (this.token) {
           this.decodeJWT(this.token)
         }
@@ -128,25 +132,23 @@ export const useAuth0 = ({
       }
     },
     async mounted() {
-      try {
-        this.auth0Client = await createAuth0Client({
-          ...options,
-          client_id: options.clientId,
-          redirect_uri: redirectUri
-        })
-        // debugger;
-        // const {appState} = await this.auth0Client.handleRedirectCallback();
-        // this.error = null;
-        // onRedirectCallback(appState);
-        this.check_token_fragment()
-        this.load_jwts()
-      } catch (e) {
-        this.error = e
-      } finally {
-        // this.isAuthenticated = await this.auth0Client.isAuthenticated();
-        // this.user = await this.auth0Client.getUser();
-        this.loading = false
-        appInstance = this
+      if (this.doInitialAuthentication) {
+        try {
+          this.auth0Client = await createAuth0Client({
+            ...options,
+            client_id: options.clientId,
+            redirect_uri: redirectUri
+          })
+          this.check_token_fragment()
+          this.load_jwts()
+        } catch (e) {
+          this.error = e
+        } finally {
+          // this.isAuthenticated = await this.auth0Client.isAuthenticated();
+          // this.user = await this.auth0Client.getUser();
+          this.loading = false
+          appInstance = this
+        }
       }
     },
     computed: {

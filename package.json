@@ -9,11 +9,14 @@
     "start": "node server.js"
   },
   "dependencies": {
+    "@websanova/vue-auth": "^4.1.0",
     "auth0-js": "^9.14.1",
+    "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "express": "^4.17.1",
     "jwt-decode": "^3.1.2",
     "vue": "3.0.5",
+    "vue-axios": "^3.2.2",
     "vue-router": "^4.0.2",
     "vuex": "^4.0.0-rc.2"
   },
@@ -21,6 +24,15 @@
     "@auth0/auth0-spa-js": "^1.13.6",
     "@babel/core": "^7.12.10",
     "@babel/eslint-parser": "^7.12.1",
+    "@fortawesome/fontawesome-pro": "^5.15.2",
+    "@fortawesome/fontawesome-svg-core": "^1.2.34",
+    "@fortawesome/free-regular-svg-icons": "^5.15.2",
+    "@fortawesome/free-solid-svg-icons": "^5.15.2",
+    "@fortawesome/pro-duotone-svg-icons": "^5.15.2",
+    "@fortawesome/pro-light-svg-icons": "^5.15.2",
+    "@fortawesome/pro-regular-svg-icons": "^5.15.2",
+    "@fortawesome/pro-solid-svg-icons": "^5.15.2",
+    "@fortawesome/vue-fontawesome": "^3.0.0-3",
     "@vue/cli-plugin-babel": "~5.0.0-alpha.0",
     "@vue/cli-plugin-eslint": "~5.0.0-alpha.0",
     "@vue/cli-plugin-router": "~5.0.0-alpha.0",
@@ -34,15 +46,6 @@
     "primevue": "^3.1.1",
     "sass": "^1.26.5",
     "sass-loader": "^8.0.2",
-    "vue-template-compiler": "^2.6.11",
-    "@fortawesome/fontawesome-pro": "^5.15.2",
-    "@fortawesome/fontawesome-svg-core": "^1.2.34",
-    "@fortawesome/free-regular-svg-icons": "^5.15.2",
-    "@fortawesome/free-solid-svg-icons": "^5.15.2",
-    "@fortawesome/pro-duotone-svg-icons": "^5.15.2",
-    "@fortawesome/pro-light-svg-icons": "^5.15.2",
-    "@fortawesome/pro-regular-svg-icons": "^5.15.2",
-    "@fortawesome/pro-solid-svg-icons": "^5.15.2",
-    "@fortawesome/vue-fontawesome": "^3.0.0-3"
+    "vue-template-compiler": "^2.6.11"
   }
 }
