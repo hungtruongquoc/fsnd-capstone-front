@@ -73,6 +73,7 @@ export const useAuth0 = ({
       },
       decodeJWT(token) {
         this.payload = decode(token)
+        console.log(decode(token))
         return this.payload
       },
       build_login_link(callbackPath = '') {
@@ -129,6 +130,9 @@ export const useAuth0 = ({
       },
       getTokenWithPopup(o) {
         return this.auth0Client.getTokenWithPopup(o)
+      },
+      can(permission) {
+        return this.payload && this.payload.permissions.includes(permission);
       }
     },
     async mounted() {

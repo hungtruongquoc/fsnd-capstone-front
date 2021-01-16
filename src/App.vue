@@ -29,8 +29,14 @@ export default {
     return {
       doInitialAuthentication: true,
       secondaryMenu: [
-        {icon: 'fas fa-fw fa-film-alt fa-lg', to: '/movies', label: 'Movies', class: 'no-label'},
-        {icon: 'fas fa-fw fa-user-cowboy fa-lg', to: '/artists', label: 'Artists', class: 'no-label'},
+        {
+          icon: 'fas fa-fw fa-film-alt fa-lg', to: '/movies', label: 'Movies', class: 'no-label',
+          visible: () => this.can('view:movies')
+        },
+        {
+          icon: 'fas fa-fw fa-user-cowboy fa-lg', to: '/artists', label: 'Artists', class: 'no-label',
+          visible: () => this.can('view:actors')
+        },
         {icon: 'fas fa-fw fa-users fa-lg', to: '/crews', label: 'Crews', class: 'no-label'},
       ],
       menus: [
