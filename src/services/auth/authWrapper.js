@@ -19,7 +19,7 @@ export const useAuth0 = ({
   return {
     data() {
       return {
-        loading: true,
+        authLoading: true,
         user: {},
         auth0Client: null,
         popupOpen: false,
@@ -105,7 +105,7 @@ export const useAuth0 = ({
         }
       },
       async handleRedirectCallback() {
-        this.loading = true;
+        this.authLoading = true;
         try {
           await this.auth0Client.handleRedirectCallback()
           this.user = await this.auth0Client.getUser()
@@ -114,7 +114,7 @@ export const useAuth0 = ({
         } catch (e) {
           this.error = e
         } finally {
-          this.loading = false
+          this.authLoading = false
         }
       },
       loginWithRedirect(o) {
