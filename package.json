@@ -9,14 +9,9 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "@websanova/vue-auth": "^4.1.0",
-    "auth0-js": "^9.14.1",
-    "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "express": "^4.17.1",
-    "jwt-decode": "^3.1.2",
     "vue": "3.0.5",
-    "vue-axios": "^3.2.2",
     "vue-router": "^4.0.2",
     "vuex": "^4.0.0-rc.2"
   },
@@ -46,6 +41,14 @@
     "primevue": "^3.1.1",
     "sass": "^1.26.5",
     "sass-loader": "^8.0.2",
-    "vue-template-compiler": "^2.6.11"
+    "vue-template-compiler": "^2.6.11",
+    "mitt": "^2.1.0",
+    "yup": "^0.32.8",
+    "vee-validate": "^4.1.9",
+    "jwt-decode": "^3.1.2",
+    "auth0-js": "^9.14.1",
+    "@websanova/vue-auth": "^4.1.0",
+    "axios": "^0.21.1",
+    "vue-axios": "^3.2.2"
   }
 }
