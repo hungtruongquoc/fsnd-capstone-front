@@ -18,7 +18,7 @@
       </Menubar>
     </div>
     <div class="p-grid" style="margin-left: 0">
-      <div class="p-col-1 app-menu" style="background-color: whitesmoke; height: 95vh; overflow: hidden"
+      <div class="p-col-1 app-menu" style="background-color: whitesmoke; height: 91.5vh; overflow: hidden"
            v-if="isAuthenticated">
         <Menu :model="secondaryMenu"/>
       </div>

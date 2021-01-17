@@ -137,6 +137,15 @@ export const useAuth0 = ({
       if (this.doInitialAuthentication) {
         try {
           this.axios.defaults.baseURL = this.appConfig.apiBaseUrl;
+          this.axios.interceptors.response.use(function(response) {
+            if (response) {
+              const {status, statusText, data} = response;
+              if (200 === status && 'OK' === statusText) {
+                return data
+              }
+            }
+            return null
+          })
           this.auth0Client = await createAuth0Client({
             ...options,
             client_id: options.clientId,
@@ -145,8 +154,6 @@ export const useAuth0 = ({
           this.check_token_fragment()
           this.load_jwts()
           // const {domain} = this.appConfig.auth0
-          console.log(this.token)
-          console.log(this.payload)
           // try {
           //   const user = await this.axios.get(`https://${domain}/userinfo`)
           //   console.log(user)
