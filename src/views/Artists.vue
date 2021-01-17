@@ -1,7 +1,10 @@
 <template>
   <BasePage>
     <template v-slot:title>
-      <ListTitleComponent text="Artists" :resourceCount="totalCount"/>
+      <div class="p-grid p-ai-center vertical-container">
+        <ListTitleComponent text="Artists" :resourceCount="totalCount"/>
+        <Badge severity="success" value="Filtered" v-if="hasFilters"/>
+      </div>
     </template>
     <template v-slot:pageScopeAction>
       <Button @click="showNewDialog" v-tooltip="'Create a new artist'">
@@ -62,13 +65,14 @@ import Button from "primevue/button"
 import Dialog from 'primevue/dialog'
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
-import MultiSelect from 'primevue/multiselect';
+import MultiSelect from 'primevue/multiselect'
+import Badge from 'primevue/badge'
 import ArtistFormComponent from "../components/ArtistFormComponent"
 import ListTitleComponent from "../components/ListTitleComponent"
 
 export default {
   name: "Artists",
-  components: {BasePage, Button, Dialog, ArtistFormComponent, DataTable, Column, ListTitleComponent, MultiSelect},
+  components: {BasePage, Button, Dialog, ArtistFormComponent, DataTable, Column, ListTitleComponent, MultiSelect, Badge},
   data() {
     return {
       showNewArtist: false,
@@ -181,6 +185,17 @@ export default {
         this.disableLoading()
       }
     },
+  },
+  computed: {
+    hasFilters() {
+      const keyArray = Object.keys(this.filters);
+      return keyArray.length > 0 && keyArray.every(name => {
+        if (Array.isArray(this.filters[name])) {
+          return this.filters[name].length > 0
+        }
+        return !!this.filters[name]
+      })
+    }
   }
 }
 </script>

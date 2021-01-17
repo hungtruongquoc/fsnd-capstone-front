@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="p-mr-2">
     {{text}} <span v-if="resourceCount > 0"> - {{resourceCount}} item(s)</span>
   </div>
 </template>
