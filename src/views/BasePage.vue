@@ -17,6 +17,7 @@
     </div>
     <div class="page-content-container">
       <slot></slot>
+      <ConfirmDialog/>
     </div>
   </div>
 </template>

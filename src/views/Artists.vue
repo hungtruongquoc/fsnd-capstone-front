@@ -6,9 +6,9 @@
         <Badge severity="success" value="Filtered" v-if="hasFilters"/>
       </div>
     </template>
-    <template v-slot:pageScopeAction>
-      <Button @click="showNewDialog" v-tooltip="'Create a new artist'" v-show-button-text="'New Artist'"
-              v-show-add-icon/>
+    <template v-slot:pageScopeAction v-if="can('create:actor')">
+      <Button @click="showNewDialog" v-tooltip="'Create a new artist'"
+              v-show-button-text="'New Artist'" v-show-add-icon/>
     </template>
     <DataTable :value="actors" :lazy="true" :totalRecords="totalCount" :loading="isLoading" class="p-datatable-striped"
                @sort="onSort($event)" dataKey="id" :filters="filters"
@@ -29,6 +29,12 @@
         </template>
         <template #body="slotProps">
           {{ convertToGenderText(slotProps.data.gender) }}
+        </template>
+      </Column>
+      <Column headerStyle="width: 16rem; text-align: center" bodyStyle="text-align: center; overflow: visible">
+        <template #body="slotProps">
+          <RecordButtonSetComponent @delete-clicked="onDeleteClick(slotProps.data)"
+                                    :show-delete="can('delete:actor')" :show-edit="can('edit:actor')"/>
         </template>
       </Column>
     </DataTable>
@@ -53,6 +59,7 @@ import ArtistFormComponent from "../components/ArtistFormComponent"
 import ListTitleComponent from "../components/ListTitleComponent"
 import BaseResourceDialogComponent from "../components/BaseResourceDialogComponent"
 import ResourcePageMixin from "../mixins/ResourcePageMixin";
+import RecordButtonSetComponent from "../components/RecordButtonSetComponent";
 
 export default {
   name: "Artists",
@@ -66,7 +73,8 @@ export default {
     ListTitleComponent,
     MultiSelect,
     Badge,
-    BaseResourceDialogComponent
+    BaseResourceDialogComponent,
+    RecordButtonSetComponent
   },
   mixins: [ResourcePageMixin],
   data() {
@@ -82,6 +90,9 @@ export default {
     convertToGenderText(genderValue) {
       const genderMap = ['Male', 'Female', 'Unspecified'];
       return genderMap[genderValue - 1];
+    },
+    _deleteArtist(data) {
+      console.log(data)
     },
     async _getActors() {
       const {currentPage, perPage, sortField, sortOrder} = this
@@ -137,6 +148,9 @@ export default {
     },
     onFilterChanged() {
       this._getActors()
+    },
+    onDeleteClick(data) {
+      this._showDeleteConfirm(`DELETE artist "${data.name}"`, data, this._deleteArtist)
     },
     showNewDialog() {
       this.showNewArtist = true

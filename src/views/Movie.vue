@@ -7,6 +7,24 @@
       <Button v-tooltip="'Create a new movie'" @click="displayNewForm" v-show-button-text="'New Movie'"
               v-show-add-icon/>
     </template>
+    <DataTable :value="movies" :lazy="true" :totalRecords="totalCount" :loading="isLoading" class="p-datatable-striped"
+               dataKey="id" :filters="filters" @sort="onSort($event)"
+               :paginator="true" :rows="perPage" @page="onPage($event)" :rowsPerPageOptions="[10, 25, 50]">
+      <Column field="title" header="Title" :sortable="true"/>
+      <Column field="release" header="Release Date" :sortable="true" headerClass="date-value-header">
+        <template #body="slotProps">
+          <div class="date-value">
+            {{ convertToLocalTime(slotProps.data.release) }}
+          </div>
+        </template>
+      </Column>
+      <Column headerStyle="width: 16rem; text-align: center" bodyStyle="text-align: center; overflow: visible">
+        <template #body="slotProps">
+          <RecordButtonSetComponent @delete-clicked="onDeleteClick(slotProps.data)"
+            :show-delete="can('delete:movie')" :show-edit="can('edit:movie')"/>
+        </template>
+      </Column>
+    </DataTable>
     <BaseResourceDialogComponent :show-dialog="showNewForm" @cancel-button-clicked="closeNewForm"
                                  :show-loading="isLoading" :loading-message="loadingMessage"
                                  :is-save-button-disabled="saveButtonDisabled" @save-button-clicked="saveMovie"
@@ -23,10 +41,16 @@ import MovieFormComponent from "../components/MovieFormComponent"
 import BaseResourceDialogComponent from "../components/BaseResourceDialogComponent"
 import FormEventsMixin from "../mixins/FormEventsMixin"
 import ListTitleComponent from "../components/ListTitleComponent";
+import DataTable from 'primevue/datatable'
+import Column from 'primevue/column'
+import RecordButtonSetComponent from "../components/RecordButtonSetComponent";
 
 export default {
   name: "Movie",
-  components: {BaseResourceDialogComponent, MovieFormComponent, BasePage, ListTitleComponent},
+  components: {
+    BaseResourceDialogComponent, MovieFormComponent, BasePage, ListTitleComponent,
+    DataTable, Column, RecordButtonSetComponent
+  },
   mixins: [ResourcePageMixin, FormEventsMixin],
   data() {
     return {
@@ -35,10 +59,21 @@ export default {
     }
   },
   mounted() {
-    debugger;
+    this.sortField = 'title'
     this._getMovies()
   },
   methods: {
+    onPage(event) {
+      this.currentPage = event.page + 1
+      this.perPage = event.rows
+      this._getMovies()
+    },
+    onSort(event) {
+      const {sortField, sortOrder} = event
+      this.sortField = sortField
+      this.sortOrder = sortOrder
+      this._getMovies()
+    },
     async _getMovies() {
       const {currentPage, perPage, sortField, sortOrder} = this
       this.isLoading = true
@@ -52,7 +87,6 @@ export default {
         const result = await this.axios.get('/movies', queryParams)
         if (result) {
           const {movies, currentPage, totalCount} = result
-          debugger
           this.movies = [...movies]
           this.currentPage = currentPage
           this.totalCount = totalCount
@@ -73,8 +107,7 @@ export default {
           detail: `Movie "${movie.title}" was successfully inserted.`,
           life: 3000
         })
-        this.postCloseCallback = null
-        this._getActors()
+        this._getMovies()
       }
     },
     async saveMovie() {
@@ -91,6 +124,18 @@ export default {
       } finally {
         this.disableLoading()
       }
+    },
+    convertToLocalTime(timeValue) {
+      if (timeValue) {
+        return (new Date(timeValue)).toLocaleDateString()
+      }
+      return '-'
+    },
+    _deleteMovie(data) {
+      console.log(data)
+    },
+    onDeleteClick(data) {
+      this._showDeleteConfirm(`DELETE movie "${data.title}"`, data, this._deleteMovie)
     }
   },
   computed: {
@@ -101,6 +146,19 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss">
+.date-value {
+  text-align: center
+}
+
+.p-datatable {
+  .p-datatable-thead {
+    th {
+      &.date-value-header {
+        text-align: center
+      }
+    }
+  }
+}
 
 </style>
