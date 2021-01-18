@@ -32,54 +32,49 @@
         </template>
       </Column>
     </DataTable>
-    <Dialog header="New Artist" :visible="showNewArtist" :modal="true" :closeable="false" :closeOnEscape="false"
-            :style="{width: '50vw'}">
+    <BaseResourceDialogComponent :show-dialog="showNewArtist" @cancel-button-clicked="closeNewArtist"
+                                 :loading-message="loadingMessage" :show-loading="isLoading"
+                                 :is-save-button-disabled="saveButtonDisabled" ok-text="Create"
+                                 @save-button-clicked="saveArtist">
       <ArtistFormComponent @formValidChanged="updateButton" @formValueChanged="updateValue"/>
-      <template #footer>
-        <div class="p-grid p-ai-center vertical-container p-jc-between">
-          <div class="loading-container p-pl-2" :style="{'visibility': isLoading ? 'visible' : 'hidden'}">
-            <font-awesome-icon :icon="['far', 'spinner']" size="lg" spin/>
-            {{ loadingMessage }}
-          </div>
-          <div class="button-container">
-            <Button @click="closeNewArtist" class="p-button-text" :disabled="isLoading">
-              <font-awesome-icon :icon="['far', 'times']" size="lg"/>
-              <span class="p-ml-2">Cancel</span>
-            </Button>
-            <Button @click="saveArtist" autofocus :disabled="saveButtonDisabled || isLoading">
-              <font-awesome-icon :icon="['far', 'save']" size="lg"/>
-              <span class="p-ml-2">Create</span>
-            </Button>
-          </div>
-        </div>
+      <template v-slot:cancel-icon>
+        <font-awesome-icon :icon="['far', 'times']" size="lg"/>
       </template>
-    </Dialog>
+      <template v-slot:ok-icon>
+        <font-awesome-icon :icon="['far', 'save']" size="lg"/>
+      </template>
+      <template v-slot:loading-icon>
+        <font-awesome-icon :icon="['far', 'spinner']" size="lg" spin/>
+      </template>
+    </BaseResourceDialogComponent>
   </BasePage>
 </template>
 
 <script>
 import BasePage from "./BasePage"
 import Button from "primevue/button"
-import Dialog from 'primevue/dialog'
+// import Dialog from 'primevue/dialog'
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
 import MultiSelect from 'primevue/multiselect'
 import Badge from 'primevue/badge'
 import ArtistFormComponent from "../components/ArtistFormComponent"
 import ListTitleComponent from "../components/ListTitleComponent"
+import BaseResourceDialogComponent from "../components/BaseResourceDialogComponent"
 
 export default {
   name: "Artists",
   components: {
     BasePage,
     Button,
-    Dialog,
+    // Dialog,
     ArtistFormComponent,
     DataTable,
     Column,
     ListTitleComponent,
     MultiSelect,
-    Badge
+    Badge,
+    BaseResourceDialogComponent
   },
   data() {
     return {

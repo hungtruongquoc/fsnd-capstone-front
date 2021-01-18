@@ -12,10 +12,6 @@ import BasePage from "./BasePage"
 
 export default {
   name: 'Home',
-  components: {BasePage},
-  created() {
-    console.log(this.isAuthenticated)
-    console.log('Home Page created')
-  }
+  components: {BasePage}
 }
 </script>
