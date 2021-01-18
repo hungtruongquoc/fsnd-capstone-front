@@ -1,5 +1,5 @@
 <template>
-  <BasePage>
+  <BasePage @searchChanged="refreshList">
     <template v-slot:title>
       <div class="p-grid p-ai-center vertical-container">
         <ListTitleComponent text="Artists" :resourceCount="totalCount"/>
@@ -7,10 +7,8 @@
       </div>
     </template>
     <template v-slot:pageScopeAction>
-      <Button @click="showNewDialog" v-tooltip="'Create a new artist'">
-        <font-awesome-icon :icon="['far', 'plus-circle']" size="lg"/>
-        <span class="p-ml-2">New Artist</span>
-      </Button>
+      <Button @click="showNewDialog" v-tooltip="'Create a new artist'" v-show-button-text="'New Artist'"
+              v-show-add-icon/>
     </template>
     <DataTable :value="actors" :lazy="true" :totalRecords="totalCount" :loading="isLoading" class="p-datatable-striped"
                @sort="onSort($event)" dataKey="id" :filters="filters"
@@ -72,7 +70,17 @@ import ListTitleComponent from "../components/ListTitleComponent"
 
 export default {
   name: "Artists",
-  components: {BasePage, Button, Dialog, ArtistFormComponent, DataTable, Column, ListTitleComponent, MultiSelect, Badge},
+  components: {
+    BasePage,
+    Button,
+    Dialog,
+    ArtistFormComponent,
+    DataTable,
+    Column,
+    ListTitleComponent,
+    MultiSelect,
+    Badge
+  },
   data() {
     return {
       showNewArtist: false,
@@ -88,7 +96,7 @@ export default {
       sortField: 'name',
       sortOrder: 1,
       filters: {},
-      statuses: [{id: 1, label: 'Male'}, {id: 2, label: 'Female'}, {id: 3, label: 'Unspecified'}]
+      statuses: [{id: 1, label: 'Male'}, {id: 2, label: 'Female'}, {id: 3, label: 'Unspecified'}],
     }
   },
   mounted() {
@@ -107,6 +115,10 @@ export default {
       if (this.filters && this.filters.status && Array.isArray(this.filters.status) && this.filters.status.length < 3) {
         const {filters: {status}} = this
         queryParams.params.status = [...status]
+      }
+
+      if (this.filters && this.filters.searchText) {
+        queryParams.params.name = this.filters.searchText
       }
 
       try {
@@ -185,6 +197,10 @@ export default {
         this.disableLoading()
       }
     },
+    refreshList(value) {
+      this.filters.searchText = value
+      this._getActors()
+    }
   },
   computed: {
     hasFilters() {
