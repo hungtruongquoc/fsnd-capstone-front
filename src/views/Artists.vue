@@ -35,17 +35,8 @@
     <BaseResourceDialogComponent :show-dialog="showNewArtist" @cancel-button-clicked="closeNewArtist"
                                  :loading-message="loadingMessage" :show-loading="isLoading"
                                  :is-save-button-disabled="saveButtonDisabled" ok-text="Create"
-                                 @save-button-clicked="saveArtist">
+                                 @save-button-clicked="saveArtist" header-text="New Artist">
       <ArtistFormComponent @formValidChanged="updateButton" @formValueChanged="updateValue"/>
-      <template v-slot:cancel-icon>
-        <font-awesome-icon :icon="['far', 'times']" size="lg"/>
-      </template>
-      <template v-slot:ok-icon>
-        <font-awesome-icon :icon="['far', 'save']" size="lg"/>
-      </template>
-      <template v-slot:loading-icon>
-        <font-awesome-icon :icon="['far', 'spinner']" size="lg" spin/>
-      </template>
     </BaseResourceDialogComponent>
   </BasePage>
 </template>
@@ -61,6 +52,7 @@ import Badge from 'primevue/badge'
 import ArtistFormComponent from "../components/ArtistFormComponent"
 import ListTitleComponent from "../components/ListTitleComponent"
 import BaseResourceDialogComponent from "../components/BaseResourceDialogComponent"
+import ResourcePageMixin from "../mixins/ResourcePageMixin";
 
 export default {
   name: "Artists",
@@ -76,21 +68,10 @@ export default {
     Badge,
     BaseResourceDialogComponent
   },
+  mixins: [ResourcePageMixin],
   data() {
     return {
       showNewArtist: false,
-      saveButtonDisabled: true,
-      formValue: null,
-      isLoading: false,
-      loadingMessage: null,
-      postCloseCallback: null,
-      currentPage: 1,
-      actors: null,
-      totalCount: 0,
-      perPage: 10,
-      sortField: 'name',
-      sortOrder: 1,
-      filters: {},
       statuses: [{id: 1, label: 'Male'}, {id: 2, label: 'Female'}, {id: 3, label: 'Unspecified'}],
     }
   },
@@ -151,32 +132,17 @@ export default {
           detail: `${artist.name} was successfully inserted.`,
           life: 3000
         })
-        this.postCloseCallback = null
         this._getActors()
       }
     },
     onFilterChanged() {
       this._getActors()
     },
-    enableLoading(message) {
-      this.isLoading = true;
-      this.loadingMessage = message;
-    },
-    disableLoading() {
-      this.isLoading = false;
-      this.loadingMessage = null;
-    },
     showNewDialog() {
       this.showNewArtist = true
     },
     closeNewArtist() {
       this.showNewArtist = false
-    },
-    updateButton(value) {
-      this.saveButtonDisabled = !value;
-    },
-    updateValue(value) {
-      this.formValue = {...value};
     },
     async saveArtist() {
       this.enableLoading('Creating new artist ...')

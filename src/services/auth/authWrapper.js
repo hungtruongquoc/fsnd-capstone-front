@@ -1,7 +1,10 @@
 import createAuth0Client from "@auth0/auth0-spa-js"
-import decode from 'jwt-decode';
+import decode from 'jwt-decode'
+import {ref} from 'vue'
 
 let appInstance
+let payload = ref(null)
+let token
 // const DEFAULT_REDIRECT_CALLBACK = () => window.history.replaceState({}, document.title, window.location.pathname);
 export const JWTS_LOCAL_KEY = 'JWTS_LOCAL_KEY';
 // const JWTS_ACTIVE_INDEX_KEY = 'JWTS_ACTIVE_INDEX_KEY';
@@ -23,15 +26,13 @@ export const useAuth0 = ({
         user: {},
         auth0Client: null,
         popupOpen: false,
-        error: null,
-        payload: null,
-        token: null
+        error: null
       }
     },
     methods: {
       logout() {
-        this.token = '';
-        this.payload = null;
+        token = ''
+        payload.value = null
         if (this.$auth) {
           this.$auth.token(null, null, false)
         }
@@ -41,13 +42,13 @@ export const useAuth0 = ({
         window.location.assign(logoutUrl);
       },
       activeJWT() {
-        return this.token
+        return token
       },
       load_jwts() {
-        this.token = localStorage.getItem(JWTS_LOCAL_KEY) || null
-        this.$auth.token(null, this.token, true)
-        if (this.token) {
-          this.decodeJWT(this.token)
+        token = localStorage.getItem(JWTS_LOCAL_KEY) || null
+        this.$auth.token(null, token, true)
+        if (token) {
+          this.decodeJWT(token)
         }
       },
       // invoked in app.component on load
@@ -57,23 +58,22 @@ export const useAuth0 = ({
         // check if the fragment includes the access token
         if (fragment[0] === 'access_token') {
           // add the access token to the jwt
-          this.token = fragment[1]
+          token = fragment[1]
           // save jwts to localstore
           this.set_jwt()
         }
       },
       set_jwt() {
-        localStorage.setItem(JWTS_LOCAL_KEY, this.token)
-        if (this.token) {
-          this.decodeJWT(this.token)
-        }
-        else {
+        localStorage.setItem(JWTS_LOCAL_KEY, token)
+        if (token) {
+          this.decodeJWT(token)
+        } else {
           localStorage.removeItem(JWTS_LOCAL_KEY);
         }
       },
       decodeJWT(token) {
-        this.payload = decode(token)
-        return this.payload
+        payload.value = JSON.parse(JSON.stringify(decode(token)))
+        return payload
       },
       build_login_link(callbackPath = '') {
         if (this.appConfig) {
@@ -130,14 +130,32 @@ export const useAuth0 = ({
         return this.auth0Client.getTokenWithPopup(o)
       },
       can(permission) {
-        return this.payload && this.payload.permissions.includes(permission);
+        return payload.value && payload.value.permissions.includes(permission);
+      },
+      getRole() {
+        if (payload.value) {
+          if (payload.value.permissions.includes('create:movie')) {
+            return 'executive producer';
+          }
+          if (payload.value.permissions.includes('edit:movie')) {
+            return 'casting director';
+          }
+          if (2 === payload.value.permissions.length) {
+            return 'casting assistant';
+          }
+          return 'authenticated';
+        }
+        return 'unknown';
+      },
+      getAuthenticated() {
+        return !!payload.value
       }
     },
     async mounted() {
       if (this.doInitialAuthentication) {
         try {
           this.axios.defaults.baseURL = this.appConfig.apiBaseUrl;
-          this.axios.interceptors.response.use(function(response) {
+          this.axios.interceptors.response.use(function (response) {
             if (response) {
               const {status, statusText, data} = response;
               if (200 === status && 'OK' === statusText) {
@@ -175,21 +193,21 @@ export const useAuth0 = ({
       loginLink() {
         return this.build_login_link(redirectUri)
       },
-      isAuthenticated() {
-        return !!this.payload
-      },
       currentToken() {
-        return this.token;
+        return token;
+      },
+      isAuthenticated() {
+        return !!payload.value
       },
       role() {
-        if (this.payload) {
-          if (this.payload.permissions.includes('create:movie')) {
+        if (payload.value) {
+          if (payload.value.permissions.includes('create:movie')) {
             return 'executive producer';
           }
-          if (this.payload.permissions.includes('edit:movie')) {
+          if (payload.value.permissions.includes('edit:movie')) {
             return 'casting director';
           }
-          if (2 === this.payload.permissions.length) {
+          if (2 === payload.value.permissions.length) {
             return 'casting assistant';
           }
           return 'authenticated';
