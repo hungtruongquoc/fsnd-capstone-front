@@ -36,5 +36,17 @@ export default {
       this.isLoading = false;
       this.loadingMessage = null;
     },
+    _showDeleteConfirm(header, data, acceptCallback) {
+      this.$confirm.require({
+        message: 'Are you sure you want to proceed?',
+        header,
+        acceptLabel: 'Delete',
+        acceptIcon: `fal fa-trash-alt`,
+        rejectIcon: `fal fa-times`,
+        acceptClass: 'p-button-danger',
+        icon: `fal fa-exclamation-circle`,
+        accept: () => acceptCallback(data)
+      });
+    }
   }
 }

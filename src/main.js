@@ -3,6 +3,8 @@ import App from './App.vue'
 import routerBuilder from './router'
 import store from './store'
 import ToastService from 'primevue/toastservice'
+import ConfirmationService from 'primevue/confirmationservice';
+import ConfirmDialog from 'primevue/confirmdialog';
 // Prime Vue //////////////////////////////////////////////////////////////////////////////////////////////////////////
 import 'primevue/resources/themes/saga-blue/theme.css'       //theme
 import 'primevue/resources/primevue.min.css'                 //core css
@@ -33,7 +35,9 @@ import {
   faPlusCircle,
   faTimes,
   faSave,
-  faSpinner
+  faSpinner,
+  faTrashAlt,
+  faEdit,
 } from '@fortawesome/pro-regular-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -43,7 +47,7 @@ import Config from './config/config'
 import VueAxios from "vue-axios";
 
 library.add(faHome, faSignInAlt, faBullhorn, faSignOut, faCameraMovie, faFilmAlt, faUserCircle, faPlusCircle, faTimes,
-  faSave, faSpinner)
+  faSave, faSpinner, faTrashAlt, faEdit)
 
 const app = createApp(App)
 const router = routerBuilder()
@@ -62,15 +66,16 @@ app.mixin(useAuth0({
     app.$router.push(appState && appState.targetUrl ? appState.targetUrl : window.location.pathname)
   }
 }))
-app.use(VueAxios, axios).use(store).use(PrimeVue).use(router).use(auth).use(ToastService)
+app.use(VueAxios, axios).use(store).use(PrimeVue).use(router).use(auth).use(ToastService).use(ConfirmationService);
 app.component('font-awesome-icon', FontAwesomeIcon)
   .component('Button', Button)
   .component('Menubar', Menubar)
   .component('PanelMenu', PanelMenu)
   .component('Toast', Toast)
-  .component('Menu', Menu).directive('tooltip', Tooltip)
+  .component('Menu', Menu)
+  .component('ConfirmDialog', ConfirmDialog)
 // Directives
-app.directive('show-button-text', {
+app.directive('tooltip', Tooltip).directive('show-button-text', {
   // When the bound element is mounted into the DOM...
   mounted(el, binding) {
     // Focus the element
