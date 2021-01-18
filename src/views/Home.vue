@@ -1,5 +1,5 @@
 <template>
-  <BasePage>
+  <BasePage :show-search-box="false">
     <template v-slot:title>Crew Admin</template>
     <div class="home">
     </div>
