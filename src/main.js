@@ -69,6 +69,24 @@ app.component('font-awesome-icon', FontAwesomeIcon)
   .component('PanelMenu', PanelMenu)
   .component('Toast', Toast)
   .component('Menu', Menu).directive('tooltip', Tooltip)
-
+// Directives
+app.directive('show-button-text', {
+  // When the bound element is mounted into the DOM...
+  mounted(el, binding) {
+    // Focus the element
+    const textNode = document.createElement('span')
+    textNode.classList.add('p-ml-2')
+    textNode.innerText = binding.value || 'Text'
+    el.appendChild(textNode)
+  }
+}).directive('show-add-icon', {
+  mounted(el) {
+    const iconNode = document.createElement('i')
+    iconNode.classList.add('far')
+    iconNode.classList.add('fa-plus-circle')
+    iconNode.classList.add('fa-lg')
+    el.prepend(iconNode)
+  }
+})
 app.mount('#app')
 
