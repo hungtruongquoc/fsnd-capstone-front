@@ -1,0 +1,76 @@
+<template>
+  <Dialog header="New Artist" :visible="showDialog" :modal="true" :closeable="false" :closeOnEscape="false"
+          :style="{width: dlgWidth}">
+    <slot></slot>
+    <template #footer>
+      <div class="p-grid p-ai-center vertical-container p-jc-between">
+        <div class="loading-container p-pl-2" :style="{'visibility': showLoading ? 'visible' : 'hidden'}">
+          <slot name="loading-icon"></slot>
+          {{ loadingMessage }}
+        </div>
+        <div class="button-container">
+          <Button @click="emitCancelClick" class="p-button-text" :disabled="showLoading">
+            <slot name="cancel-icon"></slot>
+            <span class="p-ml-2">{{cancelText}}</span>
+          </Button>
+          <Button @click="emitSaveClick" autofocus :disabled="isSaveButtonDisabled || showLoading">
+            <slot name="ok-icon"></slot>
+            <span class="p-ml-2">{{okText}}</span>
+          </Button>
+        </div>
+      </div>
+    </template>
+  </Dialog>
+</template>
+
+<script>
+import Dialog from 'primevue/dialog'
+import Button from "primevue/button"
+
+export default {
+  name: "BaseResourceDialogComponent",
+  components: {Dialog, Button},
+  props: {
+    loadingMessage: {
+      type: String,
+      default: 'Loading ...'
+    },
+    showLoading: {
+      type: Boolean,
+      default: false
+    },
+    isSaveButtonDisabled: {
+      type: Boolean,
+      default: true
+    },
+    showDialog: {
+      type: Boolean,
+      default: false
+    },
+    dlgWidth: {
+      type: String,
+      default: '50vw'
+    },
+    cancelText: {
+      type: String,
+      default: 'Cancel'
+    },
+    okText: {
+      type: String,
+      default: 'OK'
+    }
+  },
+  methods: {
+    emitSaveClick() {
+      this.$emit('save-button-clicked');
+    },
+    emitCancelClick() {
+      this.$emit('cancel-button-clicked')
+    }
+  }
+}
+</script>
+
+<style scoped>
+
+</style>
