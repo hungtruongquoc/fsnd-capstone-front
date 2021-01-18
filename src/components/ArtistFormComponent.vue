@@ -43,6 +43,7 @@ import InputNumber from "primevue/components/inputnumber/InputNumber";
 import InputText from "primevue/components/inputtext/InputText";
 import RadioButton from 'primevue/radiobutton';
 import * as yup from 'yup';
+import FormEventsMixin from "../mixins/FormEventsMixin";
 
 export default {
   name: "ArtistFormComponent",
@@ -77,10 +78,7 @@ export default {
       formStatus
     }
   },
-  emits: {
-    'form-valid-changed': null,
-    'form-value-changed': null
-  }
+  mixins: [FormEventsMixin]
 }
 </script>
 
