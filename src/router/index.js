@@ -35,6 +35,12 @@ function routeBuilder() {
       component: () => import(/* webpackChunkName: "about" */ '../views/Crews'),
       beforeEnter: authGuardBuilder
     },
+    {
+      path: '/current-user',
+      name: 'User Profile',
+      component: () => import(/* webpackChunkName: "about" */ '../views/User'),
+      beforeEnter: authGuardBuilder
+    }
   ]
 }
 

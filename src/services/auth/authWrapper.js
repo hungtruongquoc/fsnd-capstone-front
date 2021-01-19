@@ -199,6 +199,12 @@ export const useAuth0 = ({
       isAuthenticated() {
         return !!payload.value
       },
+      payloadInfo() {
+        return payload.value
+      },
+      currentPermissions() {
+        return payload.value.permissions
+      },
       role() {
         if (payload.value) {
           if (payload.value.permissions.includes('create:movie')) {

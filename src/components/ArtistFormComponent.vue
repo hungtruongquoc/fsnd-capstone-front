@@ -37,13 +37,14 @@
 </template>
 
 <script>
-import {watch} from 'vue'
+import {watch, onMounted} from 'vue'
 import {useField, useForm} from 'vee-validate';
 import InputNumber from "primevue/components/inputnumber/InputNumber";
 import InputText from "primevue/components/inputtext/InputText";
 import RadioButton from 'primevue/radiobutton';
 import * as yup from 'yup';
 import FormEventsMixin from "../mixins/FormEventsMixin";
+import FormDataMixin from "../mixins/FormDataMixin";
 
 export default {
   name: "ArtistFormComponent",
@@ -55,7 +56,7 @@ export default {
       age: yup.number().positive('Age cannot be negative').required().min(5).max(100).label('Age'),
       gender: yup.number().required().min(1).max(3).label('Gender')
     });
-    const {meta: formStatus, values} = useForm({validationSchema: schema})
+    const {meta: formStatus, values, validate} = useForm({validationSchema: schema, initialValues: props.initialInfo})
     const {value: name, errorMessage: nameError} = useField('name')
     const {value: age, errorMessage: ageError} = useField('age')
     const {value: gender, errorMessage: genderError} = useField('gender')
@@ -68,6 +69,10 @@ export default {
       emit('form-value-changed', newVal)
     })
 
+    if (props.initialInfo) {
+      onMounted(validate)
+    }
+
     return {
       name,
       nameError,
@@ -78,7 +83,7 @@ export default {
       formStatus
     }
   },
-  mixins: [FormEventsMixin]
+  mixins: [FormEventsMixin, FormDataMixin]
 }
 </script>
 

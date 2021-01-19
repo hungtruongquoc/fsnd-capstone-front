@@ -45,9 +45,10 @@ import axios from "axios";
 import {useAuth0} from "./services/auth"
 import Config from './config/config'
 import VueAxios from "vue-axios";
+import {faCheckCircle, faMinus} from "@fortawesome/pro-solid-svg-icons";
 
 library.add(faHome, faSignInAlt, faBullhorn, faSignOut, faCameraMovie, faFilmAlt, faUserCircle, faPlusCircle, faTimes,
-  faSave, faSpinner, faTrashAlt, faEdit)
+  faSave, faSpinner, faTrashAlt, faEdit, faCheckCircle, faMinus)
 
 const app = createApp(App)
 const router = routerBuilder()
@@ -61,7 +62,7 @@ const auth = createAuth({
 
 app.use(Config)
 app.mixin(useAuth0({
-  redirectUri: `${window.location.origin}/movies`,
+  redirectUri: `${window.location.origin}`,
   onRedirectCallback: appState => {
     app.$router.push(appState && appState.targetUrl ? appState.targetUrl : window.location.pathname)
   }

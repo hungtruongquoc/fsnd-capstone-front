@@ -26,6 +26,7 @@
               bodyStyle="width: 16rem; text-align: center; overflow: visible">
         <template #body="slotProps">
           <RecordButtonSetComponent @delete-clicked="onDeleteClick(slotProps.data)"
+                                    @edit-clicked="showUpdateDialog(slotProps.data)"
                                     :show-delete="can('delete:movie')" :show-edit="can('edit:movie')"/>
         </template>
       </Column>
@@ -34,7 +35,7 @@
                                  :show-loading="isLoading" :loading-message="loadingMessage"
                                  :is-save-button-disabled="saveButtonDisabled" @save-button-clicked="saveMovie"
                                  header-text="New Movie" cancel-text="Cancel" ok-text="Create">
-      <MovieFormComponent @formValidChanged="updateButton" @formValueChanged="updateValue"></MovieFormComponent>
+      <MovieFormComponent @formValidChanged="updateButton" @formValueChanged="updateValue" :initial-info="updateMovie" />
     </BaseResourceDialogComponent>
   </BasePage>
 </template>
@@ -54,7 +55,8 @@ export default {
     return {
       name: 'Movie Page',
       movies: null,
-      searchField: 'title'
+      searchField: 'title',
+      updateMovie: null
     }
   },
   mounted() {
@@ -151,7 +153,12 @@ export default {
     },
     onDeleteClick(data) {
       this._showDeleteConfirm(`DELETE movie "${data.title}"`, data, this._deleteMovie)
-    }
+    },
+    showUpdateDialog(data) {
+      this.showNewForm = true
+      data.releaseDate = new Date(data.release)
+      this.updateMovie = data
+    },
   },
   computed: {
     canCreate() {
