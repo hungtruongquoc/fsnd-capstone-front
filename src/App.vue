@@ -9,10 +9,12 @@
         </template>
         <template #end v-if="isAuthenticated">
           <div class="user-info p-grid p-ai-center vertical-container">
-            <span class="p-col">
-              <font-awesome-icon :icon="['far', 'user-circle']" size="2x"/>
-            </span>
-            <h4 class="p-text-capitalize p-col">{{role}}</h4>
+            <router-link to="/current-user">
+              <span class="p-col">
+                <font-awesome-icon :icon="['far', 'user-circle']" size="2x"/>
+              </span>
+            </router-link>
+            <h4 class="p-text-capitalize p-col">{{ role }}</h4>
           </div>
         </template>
       </Menubar>
@@ -30,8 +32,11 @@
 </template>
 
 <script>
+import {RouterLink} from 'vue-router'
+
 export default {
   name: "Login",
+  components: {RouterLink},
   data() {
     return {
       doInitialAuthentication: true,
@@ -44,7 +49,10 @@ export default {
           icon: 'fas fa-fw fa-user-cowboy fa-lg', to: '/artists', label: 'Artists', class: 'no-label',
           visible: () => this.can('view:actors')
         },
-        {icon: 'fas fa-fw fa-users fa-lg', to: '/crews', label: 'Crews', class: 'no-label'},
+        {
+          icon: 'fas fa-fw fa-users fa-lg', to: '/crews', label: 'Crews', class: 'no-label',
+          visible: () => this.can('update:crew')
+        },
       ],
       menus: [
         {label: 'Home', icon: 'fas fa-fw fa-home', to: '/'},
@@ -66,7 +74,6 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
 
   .p-menu {
