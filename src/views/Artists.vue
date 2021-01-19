@@ -32,7 +32,8 @@
           {{ convertToGenderText(slotProps.data.gender) }}
         </template>
       </Column>
-      <Column headerStyle="width: 16rem; text-align: center" bodyStyle="text-align: center; overflow: visible">
+      <Column headerStyle="width: 16rem; text-align: center"
+              bodyStyle="text-align: center; overflow: visible; width: 16rem">
         <template #body="slotProps">
           <RecordButtonSetComponent @delete-clicked="onDeleteClick(slotProps.data)"
                                     :show-delete="can('delete:actor')" :show-edit="can('edit:actor')"/>
