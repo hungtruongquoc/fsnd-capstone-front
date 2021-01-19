@@ -36,15 +36,18 @@
               bodyStyle="text-align: center; overflow: visible; width: 16rem">
         <template #body="slotProps">
           <RecordButtonSetComponent @delete-clicked="onDeleteClick(slotProps.data)"
+                                    @edit-clicked="showUpdateDialog(slotProps.data)"
                                     :show-delete="can('delete:actor')" :show-edit="can('edit:actor')"/>
         </template>
       </Column>
     </DataTable>
     <BaseResourceDialogComponent :show-dialog="showNewArtist" @cancel-button-clicked="closeNewArtist"
                                  :loading-message="loadingMessage" :show-loading="isLoading"
-                                 :is-save-button-disabled="saveButtonDisabled" ok-text="Create"
+                                 :is-save-button-disabled="saveButtonDisabled"
+                                 :ok-text="!!updateArtist ? 'Update': 'Create'"
                                  @save-button-clicked="saveArtist" header-text="New Artist">
-      <ArtistFormComponent @formValidChanged="updateButton" @formValueChanged="updateValue"/>
+      <ArtistFormComponent @formValidChanged="updateButton" @formValueChanged="updateValue"
+                           :initial-info="updateArtist"/>
     </BaseResourceDialogComponent>
   </BasePage>
 </template>
@@ -65,6 +68,7 @@ export default {
     return {
       showNewArtist: false,
       statuses: [{id: 1, label: 'Male'}, {id: 2, label: 'Female'}, {id: 3, label: 'Unspecified'}],
+      updateArtist: null
     }
   },
   mounted() {
@@ -82,8 +86,7 @@ export default {
           this._showDeleteSuccessToast(`${data.name} was successfully deleted.`)
           await this._getActors()
         }
-      }
-      catch (e) {
+      } catch (e) {
         console.error(e)
       }
     },
@@ -151,6 +154,10 @@ export default {
     },
     showNewDialog() {
       this.showNewArtist = true
+    },
+    showUpdateDialog(data) {
+      this.showNewArtist = true
+      this.updateArtist = data
     },
     closeNewArtist() {
       this.showNewArtist = false

@@ -2,6 +2,11 @@
   <div class="user-profile-container p-p-4">
     <h1 class="p-text-left">User Profile</h1>
     <Divider/>
+    <div class="role-container p-grid">
+      <h3 class="p-col-2" style="font-weight: normal">Role</h3>
+      <h3 class="p-text-capitalize p-col">{{role}}</h3>
+    </div>
+    <Divider/>
     <div class="permission-container">
       <h3>Permissions</h3>
       <div class="permission-list">

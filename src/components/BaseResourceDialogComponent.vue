@@ -37,6 +37,10 @@ export default {
   name: "BaseResourceDialogComponent",
   components: {Dialog, Button},
   props: {
+    isUpdateForm: {
+      type: Boolean,
+      default: false
+    },
     loadingMessage: {
       type: String,
       default: 'Loading ...'

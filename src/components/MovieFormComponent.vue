@@ -10,7 +10,7 @@
     </div>
     <div class="p-field p-text-left">
       <label for="release-date" :class="{'p-invalid': !!releaseDateError}">Release Date</label>
-      <Calendar id="release-date" v-model="releaseDate" :inline="true" />
+      <Calendar id="release-date" v-model="releaseDate" :inline="true"/>
       <small id="release-help" class="p-invalid">
         {{ releaseDateError }}
       </small>
@@ -23,24 +23,29 @@ import FormEventsMixin from "../mixins/FormEventsMixin"
 import BaseFormComponent from "./BaseFormComponent"
 import * as yup from "yup"
 import {useField, useForm} from "vee-validate"
-import {watch} from "vue"
+import {onMounted, watch} from "vue"
 import ResourcePageMixin from "../mixins/ResourcePageMixin"
 import InputText from "primevue/components/inputtext/InputText"
 import Calendar from 'primevue/calendar'
+import FormDataMixin from "../mixins/FormDataMixin";
 
 export default {
   name: "MovieFormComponent",
   components: {BaseFormComponent, InputText, Calendar},
-  mixins: [FormEventsMixin, ResourcePageMixin],
+  mixins: [FormEventsMixin, ResourcePageMixin, FormDataMixin],
   setup(props, {emit}) {
     // Define a validation schema
     const schema = yup.object({
       title: yup.string().required().min(5).label('Title'),
       releaseDate: yup.date().required().label('Release Date')
     });
-    const {meta: formStatus, values} = useForm({validationSchema: schema})
+    const {meta: formStatus, values, validate} = useForm({validationSchema: schema, initialValues: props.initialInfo})
     const {value: title, errorMessage: titleError} = useField('title')
     const {value: releaseDate, errorMessage: releaseDateError} = useField('releaseDate')
+
+    if (props.initialInfo) {
+      onMounted(validate)
+    }
 
     watch(formStatus, (newVal) => {
       emit('form-valid-changed', newVal.valid)

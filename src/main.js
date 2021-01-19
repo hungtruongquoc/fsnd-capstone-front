@@ -62,7 +62,7 @@ const auth = createAuth({
 
 app.use(Config)
 app.mixin(useAuth0({
-  redirectUri: `${window.location.origin}/movies`,
+  redirectUri: `${window.location.origin}`,
   onRedirectCallback: appState => {
     app.$router.push(appState && appState.targetUrl ? appState.targetUrl : window.location.pathname)
   }
