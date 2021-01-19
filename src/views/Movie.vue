@@ -34,7 +34,8 @@
     <BaseResourceDialogComponent :show-dialog="showNewForm" @cancel-button-clicked="closeNewForm"
                                  :show-loading="isLoading" :loading-message="loadingMessage"
                                  :is-save-button-disabled="saveButtonDisabled" @save-button-clicked="saveMovie"
-                                 header-text="New Movie" cancel-text="Cancel" ok-text="Create">
+                                 header-text="New Movie" cancel-text="Cancel"
+                                 :ok-text="!!updateMovie ? 'Update': 'Create'">
       <MovieFormComponent @formValidChanged="updateButton" @formValueChanged="updateValue" :initial-info="updateMovie" />
     </BaseResourceDialogComponent>
   </BasePage>
@@ -115,19 +116,47 @@ export default {
         this._getMovies()
       }
     },
+    _onAfterUpdateSuccess(data) {
+      return () => {
+        const {movie} = data
+        this.$toast.add({
+          severity: 'success',
+          summary: 'Movie Updated',
+          detail: `${movie.title} was successfully updated.`,
+          life: 3000
+        })
+        this._getMovies()
+      }
+    },
     async saveMovie() {
-      this.enableLoading('Creating new movie ...')
-      try {
-        this.formValue.releaseDate = this.formValue.releaseDate.getTime()
-        const result = await this.axios.post('/movies', this.formValue)
-        if (result) {
-          this.closeNewForm();
-          this.$nextTick(this._onAfterCreateSuccess(result))
+      this.formValue.releaseDate = this.formValue.releaseDate.getTime()
+      if (this.updateMovie) {
+        this.enableLoading(`Updating the movie ${this.updateMovie.title} ...`)
+        try {
+          const result = await this.axios.patch(`/movies/${this.updateMovie.id}`, this.formValue)
+          if (result) {
+            this.closeNewForm()
+            this.$nextTick(this._onAfterUpdateSuccess(result))
+          }
+        }  catch (error) {
+          console.error(error)
+        } finally {
+          this.disableLoading()
         }
-      } catch (error) {
-        console.error(error)
-      } finally {
-        this.disableLoading()
+      }
+      else {
+        this.enableLoading('Creating new movie ...')
+        try {
+          const result = await this.axios.post('/movies', this.formValue)
+          if (result) {
+            this.closeNewForm();
+            this.$nextTick(this._onAfterCreateSuccess(result))
+          }
+        } catch (error) {
+          console.error(error)
+        } finally {
+          this.disableLoading()
+        }
       }
     },
     refreshList(value) {
