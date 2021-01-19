@@ -1,4 +1,21 @@
+import Badge from 'primevue/badge'
+import BasePage from "../views/BasePage"
+import DataTable from 'primevue/datatable'
+import BaseResourceDialogComponent from "../components/BaseResourceDialogComponent"
+import ListTitleComponent from "../components/ListTitleComponent"
+import RecordButtonSetComponent from "../components/RecordButtonSetComponent";
+import Column from 'primevue/column'
+
 export default {
+  components: {
+    BasePage,
+    Badge,
+    DataTable,
+    BaseResourceDialogComponent,
+    ListTitleComponent,
+    RecordButtonSetComponent,
+    Column
+  },
   data() {
     return {
       isLoading: false,
@@ -13,6 +30,8 @@ export default {
       sortField: 'name',
       sortOrder: 1,
       filters: {},
+      tableScrollable: true,
+      tableHeight: '700px'
     }
   },
   methods: {
@@ -47,6 +66,36 @@ export default {
         icon: `fal fa-exclamation-circle`,
         accept: () => acceptCallback(data)
       });
+    },
+    _refreshResourceList(value, dataCallback) {
+      this.filters.searchText = value
+      dataCallback()
+    },
+    _resetPaginationInfo() {
+      this.currentPage = 1
+      this.totalCount = 0
+    },
+    _showDeleteSuccessToast(message) {
+      this.$toast.add({
+        severity: 'success',
+        summary: `Delete Success`,
+        detail: message,
+        life: 3000
+      })
+    },
+    _sendDeleteRequest(resource, id) {
+      return this.axios.delete(`/${resource}/${id}`)
+    }
+  },
+  computed: {
+    hasFilters() {
+      const keyArray = Object.keys(this.filters);
+      return keyArray.length > 0 && keyArray.every(name => {
+        if (Array.isArray(this.filters[name])) {
+          return this.filters[name].length > 0
+        }
+        return !!this.filters[name]
+      })
     }
   }
 }
