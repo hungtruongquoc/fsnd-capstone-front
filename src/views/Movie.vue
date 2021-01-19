@@ -22,7 +22,8 @@
           </div>
         </template>
       </Column>
-      <Column headerStyle="width: 16rem; text-align: center" bodyStyle="text-align: center; overflow: visible">
+      <Column headerStyle="width: 16rem; text-align: center"
+              bodyStyle="width: 16rem; text-align: center; overflow: visible">
         <template #body="slotProps">
           <RecordButtonSetComponent @delete-clicked="onDeleteClick(slotProps.data)"
                                     :show-delete="can('delete:movie')" :show-edit="can('edit:movie')"/>
