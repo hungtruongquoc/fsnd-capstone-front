@@ -146,6 +146,18 @@ export default {
         this._getActors()
       }
     },
+    onAfterUpdateSuccess(data) {
+      return () => {
+        const {artist} = data
+        this.$toast.add({
+          severity: 'success',
+          summary: 'Artist Updated',
+          detail: `${artist.name} was successfully updated.`,
+          life: 3000
+        })
+        this._getActors()
+      }
+    },
     onFilterChanged() {
       this._getActors()
     },
@@ -163,17 +175,33 @@ export default {
       this.showNewArtist = false
     },
     async saveArtist() {
-      this.enableLoading('Creating new artist ...')
-      try {
-        const result = await this.axios.post('/actors', this.formValue)
-        if (result) {
-          this.closeNewArtist();
-          this.$nextTick(this.onAfterCreateSuccess(result))
+      if (this.updateArtist) {
+        this.enableLoading(`Updating the artist ${this.updateArtist.name} ...`)
+        try {
+          const result = await this.axios.patch(`/actors/${this.updateArtist.id}`, this.formValue)
+          if (result) {
+            this.closeNewArtist()
+            this.$nextTick(this.onAfterUpdateSuccess(result))
+          }
+        }  catch (error) {
+          console.error(error)
+        } finally {
+          this.disableLoading()
         }
-      } catch (error) {
-        console.error(error)
-      } finally {
-        this.disableLoading()
+      }
+      else {
+        this.enableLoading('Creating new artist ...')
+        try {
+          const result = await this.axios.post('/actors', this.formValue)
+          if (result) {
+            this.closeNewArtist();
+            this.$nextTick(this.onAfterCreateSuccess(result))
+          }
+        } catch (error) {
+          console.error(error)
+        } finally {
+          this.disableLoading()
+        }
       }
     },
     refreshList(value) {
