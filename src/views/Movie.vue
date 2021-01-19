@@ -1,14 +1,18 @@
 <template>
-  <BasePage>
+  <BasePage @searchChanged="refreshList">
     <template v-slot:title>
-      <ListTitleComponent text="Movies" :resourceCount="totalCount"/>
+      <div class="p-grid p-ai-center vertical-container">
+        <ListTitleComponent text="Movies" :resourceCount="totalCount"/>
+        <Badge severity="success" value="Filtered" v-if="hasFilters"/>
+      </div>
     </template>
     <template v-slot:pageScopeAction v-if="canCreate">
       <Button v-tooltip="'Create a new movie'" @click="displayNewForm" v-show-button-text="'New Movie'"
               v-show-add-icon/>
     </template>
     <DataTable :value="movies" :lazy="true" :totalRecords="totalCount" :loading="isLoading" class="p-datatable-striped"
-               dataKey="id" :filters="filters" @sort="onSort($event)"
+               dataKey="id" :filters="filters" @sort="onSort($event)" sortField="title" :sortOrder="1"
+               :scrollable="tableScrollable" :scrollHeight="tableHeight"
                :paginator="true" :rows="perPage" @page="onPage($event)" :rowsPerPageOptions="[10, 25, 50]">
       <Column field="title" header="Title" :sortable="true"/>
       <Column field="release" header="Release Date" :sortable="true" headerClass="date-value-header">
@@ -21,7 +25,7 @@
       <Column headerStyle="width: 16rem; text-align: center" bodyStyle="text-align: center; overflow: visible">
         <template #body="slotProps">
           <RecordButtonSetComponent @delete-clicked="onDeleteClick(slotProps.data)"
-            :show-delete="can('delete:movie')" :show-edit="can('edit:movie')"/>
+                                    :show-delete="can('delete:movie')" :show-edit="can('edit:movie')"/>
         </template>
       </Column>
     </DataTable>
@@ -35,27 +39,21 @@
 </template>
 
 <script>
-import BasePage from "./BasePage.vue"
 import ResourcePageMixin from "../mixins/ResourcePageMixin"
 import MovieFormComponent from "../components/MovieFormComponent"
-import BaseResourceDialogComponent from "../components/BaseResourceDialogComponent"
 import FormEventsMixin from "../mixins/FormEventsMixin"
-import ListTitleComponent from "../components/ListTitleComponent";
-import DataTable from 'primevue/datatable'
-import Column from 'primevue/column'
-import RecordButtonSetComponent from "../components/RecordButtonSetComponent";
 
 export default {
   name: "Movie",
   components: {
-    BaseResourceDialogComponent, MovieFormComponent, BasePage, ListTitleComponent,
-    DataTable, Column, RecordButtonSetComponent
+    MovieFormComponent
   },
   mixins: [ResourcePageMixin, FormEventsMixin],
   data() {
     return {
       name: 'Movie Page',
-      movies: null
+      movies: null,
+      searchField: 'title'
     }
   },
   mounted() {
@@ -80,7 +78,7 @@ export default {
       const queryParams = {params: {page: currentPage, perPage, sortField, sortOrder: sortOrder > 0 ? 'asc' : 'desc'}}
 
       if (this.filters && this.filters.searchText) {
-        queryParams.params.name = this.filters.searchText
+        queryParams.params.title = this.filters.searchText
       }
 
       try {
@@ -90,10 +88,14 @@ export default {
           this.movies = [...movies]
           this.currentPage = currentPage
           this.totalCount = totalCount
+        } else {
+          this.movies = []
+          this._resetPaginationInfo()
         }
       } catch (e) {
         console.error(e)
         this.movies = null
+        this._resetPaginationInfo()
       } finally {
         this.isLoading = false
       }
@@ -125,14 +127,26 @@ export default {
         this.disableLoading()
       }
     },
+    refreshList(value) {
+      this._refreshResourceList(value, this._getMovies)
+    },
     convertToLocalTime(timeValue) {
       if (timeValue) {
         return (new Date(timeValue)).toLocaleDateString()
       }
       return '-'
     },
-    _deleteMovie(data) {
-      console.log(data)
+    async _deleteMovie(data) {
+      try {
+        const result = await this._sendDeleteRequest('movies', data.id)
+        if (result && result.success) {
+          this._showDeleteSuccessToast(`Movie "${data.name}" was successfully deleted.`)
+          await this._getMovies()
+        }
+      }
+      catch (e) {
+        console.error(e)
+      }
     },
     onDeleteClick(data) {
       this._showDeleteConfirm(`DELETE movie "${data.title}"`, data, this._deleteMovie)

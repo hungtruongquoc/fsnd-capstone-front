@@ -11,7 +11,8 @@
               v-show-button-text="'New Artist'" v-show-add-icon/>
     </template>
     <DataTable :value="actors" :lazy="true" :totalRecords="totalCount" :loading="isLoading" class="p-datatable-striped"
-               @sort="onSort($event)" dataKey="id" :filters="filters"
+               :scrollable="tableScrollable" :scrollHeight="tableHeight"
+               @sort="onSort($event)" dataKey="id" :filters="filters" sortField="name" :sortOrder="1"
                :paginator="true" :rows="perPage" @page="onPage($event)" :rowsPerPageOptions="[10, 25, 50]">
       <Column field="name" header="Name" :sortable="true"/>
       <Column field="age" header="Age" :sortable="true" headerClass="number-value-header">
@@ -48,33 +49,15 @@
 </template>
 
 <script>
-import BasePage from "./BasePage"
-import Button from "primevue/button"
-// import Dialog from 'primevue/dialog'
-import DataTable from 'primevue/datatable'
-import Column from 'primevue/column'
 import MultiSelect from 'primevue/multiselect'
-import Badge from 'primevue/badge'
 import ArtistFormComponent from "../components/ArtistFormComponent"
-import ListTitleComponent from "../components/ListTitleComponent"
-import BaseResourceDialogComponent from "../components/BaseResourceDialogComponent"
 import ResourcePageMixin from "../mixins/ResourcePageMixin";
-import RecordButtonSetComponent from "../components/RecordButtonSetComponent";
 
 export default {
   name: "Artists",
   components: {
-    BasePage,
-    Button,
-    // Dialog,
     ArtistFormComponent,
-    DataTable,
-    Column,
-    ListTitleComponent,
-    MultiSelect,
-    Badge,
-    BaseResourceDialogComponent,
-    RecordButtonSetComponent
+    MultiSelect
   },
   mixins: [ResourcePageMixin],
   data() {
@@ -91,8 +74,17 @@ export default {
       const genderMap = ['Male', 'Female', 'Unspecified'];
       return genderMap[genderValue - 1];
     },
-    _deleteArtist(data) {
-      console.log(data)
+    async _deleteArtist(data) {
+      try {
+        const result = await this._sendDeleteRequest('actors', data.id)
+        if (result && result.success) {
+          this._showDeleteSuccessToast(`${data.name} was successfully deleted.`)
+          await this._getActors()
+        }
+      }
+      catch (e) {
+        console.error(e)
+      }
     },
     async _getActors() {
       const {currentPage, perPage, sortField, sortOrder} = this
@@ -115,10 +107,14 @@ export default {
           this.actors = [...actors]
           this.currentPage = currentPage
           this.totalCount = totalCount
+        } else {
+          this.actors = []
+          this._resetPaginationInfo()
         }
       } catch (e) {
         console.error(e)
         this.actors = null
+        this._resetPaginationInfo()
       } finally {
         this.isLoading = false
       }
@@ -173,19 +169,7 @@ export default {
       }
     },
     refreshList(value) {
-      this.filters.searchText = value
-      this._getActors()
-    }
-  },
-  computed: {
-    hasFilters() {
-      const keyArray = Object.keys(this.filters);
-      return keyArray.length > 0 && keyArray.every(name => {
-        if (Array.isArray(this.filters[name])) {
-          return this.filters[name].length > 0
-        }
-        return !!this.filters[name]
-      })
+      this._refreshResourceList(value, this._getActors)
     }
   }
 }
