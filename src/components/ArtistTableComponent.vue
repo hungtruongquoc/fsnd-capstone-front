@@ -3,7 +3,14 @@
              :scrollable="tableScrollable" :scrollHeight="tableHeight"
              @sort="onSort($event)" dataKey="id" :filters="filters" sortField="name" :sortOrder="1"
              :paginator="true" :rows="perPage" @page="onPage($event)" :rowsPerPageOptions="[10, 25, 50]">
-    <Column field="name" header="Name" :sortable="true"/>
+    <Column field="name" header="Name" :sortable="true">
+      <template #body="slotProps">
+        <div class="number-value">
+          <font-awesome-icon :icon="['fas', 'check-circle']" fixed-width v-if="showSelection && slotProps.data.selected"/>
+          <span class="p-ml-2">{{ slotProps.data.name }}</span>
+        </div>
+      </template>
+    </Column>
     <Column field="age" header="Age" :sortable="true" headerClass="number-value-header"
             headerStyle="text-align: right">
       <template #body="slotProps">
@@ -27,7 +34,10 @@
       <template #body="slotProps">
         <RecordButtonSetComponent @delete-clicked="onDeleteClick(slotProps.data)"
                                   @selection-clicked="onSelectionClicked(slotProps.data)"
-                                  @edit-clicked="onEditClick(slotProps.data)" :show-selection="showSelection"
+                                  @edit-clicked="onEditClick(slotProps.data)"
+                                  @remove-clicked="$emit('remove-clicked', slotProps.data)"
+                                  :show-selection="showSelection && !slotProps.data.selected"
+                                  :show-remove="showRemove && slotProps.data.selected"
                                   :show-delete="showDeleteButton" :show-edit="showEditButton"/>
       </template>
     </Column>
@@ -68,6 +78,10 @@ export default {
       type: Boolean,
       default: false
     },
+    showRemove: {
+      type: Boolean,
+      default: false
+    },
     isLoading: {
       type: Boolean,
       default: false
@@ -75,6 +89,13 @@ export default {
     totalCount: {
       type: Number,
       default: 0
+    },
+    toggleSelectionFunc: {
+      type: Function,
+      default: (item) => {
+        item = null
+        return item
+      }
     }
   },
   data() {
@@ -90,7 +111,8 @@ export default {
     'delete-clicked',
     'edit-clicked',
     'filter-changed',
-    'artist-selected'
+    'artist-selected',
+    'remove-clicked'
   ],
   methods: {
     convertToGenderText(genderValue) {

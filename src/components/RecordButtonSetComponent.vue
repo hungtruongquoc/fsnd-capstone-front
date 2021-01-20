@@ -11,6 +11,9 @@
     <Button type="button" class="p-button-info" v-if="showSelection" @click="$emit('selection-clicked')">
       <font-awesome-icon :icon="['far', 'plus']" fixed-width/>
     </Button>
+    <Button type="button" class="p-button-info" v-if="showRemove" @click="$emit('remove-clicked')">
+      <font-awesome-icon :icon="['far', 'minus']" fixed-width/>
+    </Button>
   </span>
 </template>
 
@@ -30,6 +33,10 @@ export default {
       type: Boolean,
       default: false
     },
+    showRemove: {
+      type: Boolean,
+      default: false
+    },
     editTooltip: {
       type: String,
       default: 'Edit'
@@ -42,7 +49,8 @@ export default {
   emits: [
     'delete-clicked',
     'edit-clicked',
-    'selection-clicked'
+    'selection-clicked',
+    'remove-clicked'
   ]
 }
 </script>

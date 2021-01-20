@@ -39,8 +39,8 @@
 <script>
 import {watch, onMounted} from 'vue'
 import {useField, useForm} from 'vee-validate';
-import InputNumber from "primevue/components/inputnumber/InputNumber";
-import InputText from "primevue/components/inputtext/InputText";
+import InputNumber from "primevue/inputnumber";
+import InputText from "primevue/inputtext";
 import RadioButton from 'primevue/radiobutton';
 import * as yup from 'yup';
 import FormEventsMixin from "../mixins/FormEventsMixin";
