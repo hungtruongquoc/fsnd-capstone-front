@@ -10,37 +10,9 @@
       <Button @click="showNewDialog" v-tooltip="'Create a new artist'"
               v-show-button-text="'New Artist'" v-show-add-icon/>
     </template>
-    <DataTable :value="actors" :lazy="true" :totalRecords="totalCount" :loading="isLoading" class="p-datatable-striped"
-               :scrollable="tableScrollable" :scrollHeight="tableHeight"
-               @sort="onSort($event)" dataKey="id" :filters="filters" sortField="name" :sortOrder="1"
-               :paginator="true" :rows="perPage" @page="onPage($event)" :rowsPerPageOptions="[10, 25, 50]">
-      <Column field="name" header="Name" :sortable="true"/>
-      <Column field="age" header="Age" :sortable="true" headerClass="number-value-header">
-        <template #body="slotProps">
-          <div class="number-value">
-            {{ slotProps.data.age }}
-          </div>
-        </template>
-      </Column>
-      <Column header="Gender" :sortable="true" field="gender" filterMatchMode="equals">
-        <template #filter>
-          <MultiSelect v-model="filters['status']" :options="statuses" optionValue="id" optionLabel="label"
-                       dataKey="id" @change="onFilterChanged($event)"
-                       placeholder="Select a gender value" class="p-column-filter" :showClear="true"/>
-        </template>
-        <template #body="slotProps">
-          {{ convertToGenderText(slotProps.data.gender) }}
-        </template>
-      </Column>
-      <Column headerStyle="width: 16rem; text-align: center"
-              bodyStyle="text-align: center; overflow: visible; width: 16rem">
-        <template #body="slotProps">
-          <RecordButtonSetComponent @delete-clicked="onDeleteClick(slotProps.data)"
-                                    @edit-clicked="showUpdateDialog(slotProps.data)"
-                                    :show-delete="can('delete:actor')" :show-edit="can('edit:actor')"/>
-        </template>
-      </Column>
-    </DataTable>
+    <ArtistTableComponent :actors="actors" @page-changed="onPage" :total-count="totalCount"
+                          @filter-changed="onFilterChanged" @sort-changed="onSort"
+                          @delete-clicked="onDeleteClick" @edit-clicked="showUpdateDialog"/>
     <BaseResourceDialogComponent :show-dialog="showNewArtist" @cancel-button-clicked="closeNewArtist"
                                  :loading-message="loadingMessage" :show-loading="isLoading"
                                  :is-save-button-disabled="saveButtonDisabled"
@@ -53,25 +25,32 @@
 </template>
 
 <script>
-import MultiSelect from 'primevue/multiselect'
 import ArtistFormComponent from "../components/ArtistFormComponent"
-import ResourcePageMixin from "../mixins/ResourcePageMixin";
+import ResourcePageMixin from "../mixins/ResourcePageMixin"
+import ArtistTableComponent from '../components/ArtistTableComponent'
+import {ArtistServiceBuilder} from '../services/artists'
 
 export default {
   name: "Artists",
   components: {
     ArtistFormComponent,
-    MultiSelect
+    ArtistTableComponent
   },
   mixins: [ResourcePageMixin],
+  setup() {
+    return {
+      ArtistServiceBuilder
+    }
+  },
   data() {
     return {
       showNewArtist: false,
-      statuses: [{id: 1, label: 'Male'}, {id: 2, label: 'Female'}, {id: 3, label: 'Unspecified'}],
-      updateArtist: null
+      updateArtist: null,
+      filters: {}
     }
   },
   mounted() {
+    this.artistService = this.ArtistServiceBuilder(this.axios)
     this._getActors()
   },
   methods: {
@@ -91,21 +70,21 @@ export default {
       }
     },
     async _getActors() {
-      const {currentPage, perPage, sortField, sortOrder} = this
+      const {currentPage, perPage, sortField, sortOrder, artistService, filters} = this
       this.isLoading = true
-      const queryParams = {params: {page: currentPage, perPage, sortField, sortOrder: sortOrder > 0 ? 'asc' : 'desc'}}
+      const queryParams = {page: currentPage, perPage, sortField, sortOrder: artistService.convertNumberToSortDirection(sortOrder)}
 
-      if (this.filters && this.filters.status && Array.isArray(this.filters.status) && this.filters.status.length < 3) {
-        const {filters: {status}} = this
-        queryParams.params.status = [...status]
+      if (filters && filters.genders && Array.isArray(filters.genders) && filters.genders.length < 3) {
+        const {filters: {genders}} = this
+        queryParams.genders = [...genders]
       }
-
+      debugger
       if (this.filters && this.filters.searchText) {
-        queryParams.params.name = this.filters.searchText
+        queryParams.name = this.filters.searchText
       }
 
       try {
-        const result = await this.axios.get('/actors', queryParams)
+        const result = await this.artistService.fetchArtists(queryParams)
         if (result) {
           const {actors, currentPage, totalCount} = result
           this.actors = [...actors]
@@ -158,7 +137,8 @@ export default {
         this._getActors()
       }
     },
-    onFilterChanged() {
+    onFilterChanged(filter) {
+      this.filters = {...filter}
       this._getActors()
     },
     onDeleteClick(data) {

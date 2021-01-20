@@ -18,7 +18,7 @@
       <Column field="release" header="Release Date" :sortable="true" headerClass="date-value-header">
         <template #body="slotProps">
           <div class="date-value">
-            {{ convertToLocalTime(slotProps.data.release) }}
+            {{ formatDate(slotProps.data.release) }}
           </div>
         </template>
       </Column>
@@ -45,6 +45,7 @@
 import ResourcePageMixin from "../mixins/ResourcePageMixin"
 import MovieFormComponent from "../components/MovieFormComponent"
 import FormEventsMixin from "../mixins/FormEventsMixin"
+import {formatDate} from '../helpers/DateFormatHelper'
 
 export default {
   name: "Movie",
@@ -52,6 +53,11 @@ export default {
     MovieFormComponent
   },
   mixins: [ResourcePageMixin, FormEventsMixin],
+  setup() {
+    return {
+      formatDate
+    }
+  },
   data() {
     return {
       name: 'Movie Page',
@@ -147,7 +153,7 @@ export default {
       else {
         this.enableLoading('Creating new movie ...')
         try {
-          const result = await this.axios.post('/movies', this.formValue)
+          const result = await this.axios.post('/crew', this.formValue)
           if (result) {
             this.closeNewForm();
             this.$nextTick(this._onAfterCreateSuccess(result))
@@ -161,12 +167,6 @@ export default {
     },
     refreshList(value) {
       this._refreshResourceList(value, this._getMovies)
-    },
-    convertToLocalTime(timeValue) {
-      if (timeValue) {
-        return (new Date(timeValue)).toLocaleDateString()
-      }
-      return '-'
     },
     async _deleteMovie(data) {
       try {

@@ -38,17 +38,20 @@ import {
   faSpinner,
   faTrashAlt,
   faEdit,
+  faUserPlus,
+  faInfoCircle,
+  faPlus,
 } from '@fortawesome/pro-regular-svg-icons'
+import {faCheckCircle, faMinus} from "@fortawesome/pro-solid-svg-icons";
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 import axios from "axios";
 import {useAuth0} from "./services/auth"
 import Config from './config/config'
 import VueAxios from "vue-axios";
-import {faCheckCircle, faMinus} from "@fortawesome/pro-solid-svg-icons";
 
 library.add(faHome, faSignInAlt, faBullhorn, faSignOut, faCameraMovie, faFilmAlt, faUserCircle, faPlusCircle, faTimes,
-  faSave, faSpinner, faTrashAlt, faEdit, faCheckCircle, faMinus)
+  faSave, faSpinner, faTrashAlt, faEdit, faCheckCircle, faMinus, faUserPlus, faInfoCircle, faPlus)
 
 const app = createApp(App)
 const router = routerBuilder()
