@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import InputText from "primevue/components/inputtext/InputText";
+import InputText from "primevue/inputtext";
 
 export default {
   name: "BasePage",

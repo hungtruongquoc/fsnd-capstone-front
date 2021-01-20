@@ -25,7 +25,7 @@ import * as yup from "yup"
 import {useField, useForm} from "vee-validate"
 import {onMounted, watch} from "vue"
 import ResourcePageMixin from "../mixins/ResourcePageMixin"
-import InputText from "primevue/components/inputtext/InputText"
+import InputText from "primevue/inputtext"
 import Calendar from 'primevue/calendar'
 import FormDataMixin from "../mixins/FormDataMixin";
 
