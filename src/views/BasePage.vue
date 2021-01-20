@@ -39,6 +39,9 @@ export default {
       searchText: null
     }
   },
+  emits: [
+    'search-changed'
+  ],
   methods: {
     emitSearchValue() {
       this.$emit('search-changed', this.searchText)

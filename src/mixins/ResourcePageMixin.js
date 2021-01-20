@@ -30,7 +30,7 @@ export default {
       sortField: 'name',
       sortOrder: 1,
       filters: {},
-      tableScrollable: true,
+      tableScrollable: false,
       tableHeight: '700px'
     }
   },

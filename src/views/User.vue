@@ -23,7 +23,7 @@
               <font-awesome-icon :icon="['fas', getIconName('view:actors')]" size="lg"/>
             </h5>
             <h5 class="p-col">
-              <font-awesome-icon :icon="['fas', getIconName('view:movies')]" size="lg"/>
+              <font-awesome-icon :icon="['fas', getIconName('view:crew')]" size="lg"/>
             </h5>
             <h5 class="p-col">
               <font-awesome-icon :icon="['fas', getIconName('update:crew')]" size="lg"/>

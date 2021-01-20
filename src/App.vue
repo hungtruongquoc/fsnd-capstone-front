@@ -42,7 +42,7 @@ export default {
       doInitialAuthentication: true,
       secondaryMenu: [
         {
-          icon: 'fas fa-fw fa-film-alt fa-lg', to: '/movies', label: 'Movies', class: 'no-label',
+          icon: 'fas fa-fw fa-film-alt fa-lg', to: '/crew', label: 'Movies', class: 'no-label',
           visible: () => this.can('view:movies')
         },
         {

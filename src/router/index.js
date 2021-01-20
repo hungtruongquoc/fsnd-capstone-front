@@ -18,7 +18,7 @@ function routeBuilder() {
       component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
     },
     {
-      path: '/movies',
+      path: '/crew',
       name: 'Movie List',
       component: () => import(/* webpackChunkName: "about" */ '../views/Movie.vue'),
       beforeEnter: authGuardBuilder

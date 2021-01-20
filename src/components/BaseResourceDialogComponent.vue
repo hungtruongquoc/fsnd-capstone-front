@@ -3,7 +3,7 @@
           :style="{width: dlgWidth}">
     <slot></slot>
     <template #footer>
-      <div class="p-grid p-ai-center vertical-container p-jc-between">
+      <div class="p-grid p-ai-center vertical-container p-jc-between" style="padding-top: 1.5rem">
         <div class="loading-container p-pl-2" :style="{'visibility': showLoading ? 'visible' : 'hidden'}">
           <slot name="loading-icon">
             <font-awesome-icon :icon="['far', 'spinner']" size="lg" spin/>
